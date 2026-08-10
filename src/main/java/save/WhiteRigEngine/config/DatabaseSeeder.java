@@ -3,9 +3,14 @@ package save.WhiteRigEngine.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+import save.WhiteRigEngine.entities.BlogPost;
 import save.WhiteRigEngine.entities.ComponentProduct;
+import save.WhiteRigEngine.entities.User;
 import save.WhiteRigEngine.model.Category;
+import save.WhiteRigEngine.model.Role;
+import save.WhiteRigEngine.repositories.BlogPostRepository;
 import save.WhiteRigEngine.repositories.ComponentRepository;
+import save.WhiteRigEngine.repositories.UserRepository;
 
 import java.math.BigDecimal;
 
@@ -13,10 +18,16 @@ import java.math.BigDecimal;
 public class DatabaseSeeder implements CommandLineRunner {
 
     private final ComponentRepository componentRepository;
+    private final UserRepository userRepository;
+    private final BlogPostRepository blogPostRepository;
 
     @Autowired
-    public DatabaseSeeder(ComponentRepository componentRepository) {
+    public DatabaseSeeder(ComponentRepository componentRepository,
+                          UserRepository userRepository,
+                          BlogPostRepository blogPostRepository) {
         this.componentRepository = componentRepository;
+        this.userRepository = userRepository;
+        this.blogPostRepository = blogPostRepository;
     }
 
     @Override
@@ -43,19 +54,29 @@ public class DatabaseSeeder implements CommandLineRunner {
                     "https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=500",
                     8
             ));
-
-            componentRepository.save(new ComponentProduct(
-                    null,
-                    "Vengeance DDR5 32GB (2x16GB) 6000MHz",
-                    "Corsair",
-                    new BigDecimal("125.50"),
-                    Category.RAM,
-                    "Kit di memoria RAM DDR5 ad alte prestazioni con supporto EXPO/XMP.",
-                    "https://images.unsplash.com/photo-1562976540-1502c2145186?w=500",
-                    25
-            ));
-
-            System.out.println("Dati iniziali caricati con successo!");
         }
+
+        if (userRepository.count() == 0) {
+            userRepository.save(new User(
+                    null,
+                    "admin",
+                    "admin@whiterig.it",
+                    "admin123",
+                    Role.ADMIN
+            ));
+        }
+
+        if (blogPostRepository.count() == 0) {
+            blogPostRepository.save(new BlogPost(
+                    null,
+                    "Benvenuti su WhiteRig Engine!",
+                    "Questo blog racchiude la mia passione per l'hardware e il mondo dei PC Custom.",
+                    "Saverio",
+                    "https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=500",
+                    null
+            ));
+        }
+
+        System.out.println("Dati iniziali (Componenti, User, Blog) caricati con successo!");
     }
 }
