@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import save.WhiteRigEngine.entities.ComponentProduct;
 import save.WhiteRigEngine.entities.CustomBuild;
+import save.WhiteRigEngine.exceptions.ResourceNotFoundException;
 import save.WhiteRigEngine.model.BuildRequestDTO;
 import save.WhiteRigEngine.repositories.BuildRepository;
 import save.WhiteRigEngine.repositories.ComponentRepository;
@@ -11,7 +12,6 @@ import save.WhiteRigEngine.repositories.ComponentRepository;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Stream;
 
 @Service
@@ -30,8 +30,9 @@ public class BuildService {
         return buildRepository.findAll();
     }
 
-    public Optional<CustomBuild> getBuildById(Long id) {
-        return buildRepository.findById(id);
+    public CustomBuild getBuildById(Long id) {
+        return buildRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Configurazione PC non trovata con ID: " + id));
     }
 
     public List<CustomBuild> getBuildsByUserId(Long userId) {
@@ -43,7 +44,6 @@ public class BuildService {
         build.setBuildName(dto.getBuildName());
         build.setUserId(dto.getUserId());
 
-        // Assegnazione pulita dei componenti tramite helper
         build.setCpu(fetchComponent(dto.getCpuId()));
         build.setGpu(fetchComponent(dto.getGpuId()));
         build.setRam(fetchComponent(dto.getRamId()));
@@ -52,7 +52,6 @@ public class BuildService {
         build.setPsu(fetchComponent(dto.getPsuId()));
         build.setPcCase(fetchComponent(dto.getCaseId()));
 
-        // Calcolo del prezzo totale
         BigDecimal totalPrice = Stream.of(
                         build.getCpu(),
                         build.getGpu(),
@@ -71,10 +70,10 @@ public class BuildService {
     }
 
     public void deleteBuild(Long id) {
-        buildRepository.deleteById(id);
+        CustomBuild build = getBuildById(id);
+        buildRepository.delete(build);
     }
 
-    // Helper per recuperare il componente
     private ComponentProduct fetchComponent(Long id) {
         return (id != null) ? componentRepository.findById(id).orElse(null) : null;
     }

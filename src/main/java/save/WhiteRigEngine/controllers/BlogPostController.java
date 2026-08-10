@@ -27,9 +27,7 @@ public class BlogPostController {
 
     @GetMapping("/{id}")
     public ResponseEntity<BlogPost> getPostById(@PathVariable Long id) {
-        return blogPostService.getPostById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        return ResponseEntity.ok(blogPostService.getPostById(id));
     }
 
     @PostMapping

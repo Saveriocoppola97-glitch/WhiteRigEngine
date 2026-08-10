@@ -21,7 +21,7 @@ public class ComponentController {
         this.componentService = componentService;
     }
 
-    // GET che restituisce tutti i componenti (o filtrati per categoria/ricerca)
+    // GET che restituisce tutti i componenti o li filtra per categoria
     @GetMapping
     public ResponseEntity<List<ComponentProduct>> getAllComponents(
             @RequestParam(required = false) Category category,
@@ -37,49 +37,42 @@ public class ComponentController {
         return ResponseEntity.ok(componentService.getAllComponents());
     }
 
-    // GET che restituisce il dettaglio di un singolo componente
+    // GET che restituisce i dettagli di un singolo componente
     @GetMapping("/{id}")
     public ResponseEntity<ComponentProduct> getComponentById(@PathVariable Long id) {
-        return componentService.getComponentById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        return ResponseEntity.ok(componentService.getComponentById(id));
     }
 
-    // POST che aggiunge un nuovo componente
+    // POST che ne aggiunge uno nuovo
     @PostMapping
     public ResponseEntity<ComponentProduct> createComponent(@RequestBody ComponentProduct component) {
         ComponentProduct created = componentService.saveComponent(component);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
-    // PUT che aggiorna un componente esistente
+    // PUT che aggiorna uno già esistente
     @PutMapping("/{id}")
     public ResponseEntity<ComponentProduct> updateComponent(
             @PathVariable Long id,
             @RequestBody ComponentProduct componentDetails) {
 
-        return componentService.getComponentById(id)
-                .map(existingComponent -> {
-                    existingComponent.setName(componentDetails.getName());
-                    existingComponent.setBrand(componentDetails.getBrand());
-                    existingComponent.setPrice(componentDetails.getPrice());
-                    existingComponent.setCategory(componentDetails.getCategory());
-                    existingComponent.setDescription(componentDetails.getDescription());
-                    existingComponent.setImageUrl(componentDetails.getImageUrl());
-                    existingComponent.setStockQuantity(componentDetails.getStockQuantity());
-                    ComponentProduct updated = componentService.saveComponent(existingComponent);
-                    return ResponseEntity.ok(updated);
-                })
-                .orElse(ResponseEntity.notFound().build());
+        ComponentProduct existingComponent = componentService.getComponentById(id);
+
+        existingComponent.setName(componentDetails.getName());
+        existingComponent.setBrand(componentDetails.getBrand());
+        existingComponent.setPrice(componentDetails.getPrice());
+        existingComponent.setCategory(componentDetails.getCategory());
+        existingComponent.setDescription(componentDetails.getDescription());
+        existingComponent.setImageUrl(componentDetails.getImageUrl());
+        existingComponent.setStockQuantity(componentDetails.getStockQuantity());
+
+        return ResponseEntity.ok(componentService.saveComponent(existingComponent));
     }
 
-    // DELETE che elimina un componente
+    // DELETE che elimina il componente
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteComponent(@PathVariable Long id) {
-        if (componentService.getComponentById(id).isPresent()) {
-            componentService.deleteComponent(id);
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.notFound().build();
+        componentService.deleteComponent(id);
+        return ResponseEntity.noContent().build();
     }
 }

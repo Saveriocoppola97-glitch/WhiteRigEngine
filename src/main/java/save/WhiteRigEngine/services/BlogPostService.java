@@ -3,10 +3,10 @@ package save.WhiteRigEngine.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import save.WhiteRigEngine.entities.BlogPost;
+import save.WhiteRigEngine.exceptions.ResourceNotFoundException;
 import save.WhiteRigEngine.repositories.BlogPostRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class BlogPostService {
@@ -22,8 +22,9 @@ public class BlogPostService {
         return blogPostRepository.findAllByOrderByCreatedAtDesc();
     }
 
-    public Optional<BlogPost> getPostById(Long id) {
-        return blogPostRepository.findById(id);
+    public BlogPost getPostById(Long id) {
+        return blogPostRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Articolo blog non trovato con ID: " + id));
     }
 
     public BlogPost savePost(BlogPost post) {
@@ -31,6 +32,7 @@ public class BlogPostService {
     }
 
     public void deletePost(Long id) {
-        blogPostRepository.deleteById(id);
+        BlogPost post = getPostById(id);
+        blogPostRepository.delete(post);
     }
 }

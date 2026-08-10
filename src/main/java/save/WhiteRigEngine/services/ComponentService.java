@@ -3,11 +3,11 @@ package save.WhiteRigEngine.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import save.WhiteRigEngine.entities.ComponentProduct;
+import save.WhiteRigEngine.exceptions.ResourceNotFoundException;
 import save.WhiteRigEngine.model.Category;
 import save.WhiteRigEngine.repositories.ComponentRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ComponentService {
@@ -24,17 +24,18 @@ public class ComponentService {
         return componentRepository.findAll();
     }
 
-    // Recupera componente per ID
-    public Optional<ComponentProduct> getComponentById(Long id) {
-        return componentRepository.findById(id);
+    // Recupera componenti per ID
+    public ComponentProduct getComponentById(Long id) {
+        return componentRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Componente non trovato con ID: " + id));
     }
 
-    // Recupera componenti per categoria
+    // Recupera i componenti per categoria
     public List<ComponentProduct> getComponentsByCategory(Category category) {
         return componentRepository.findByCategory(category);
     }
 
-    // Cerca componenti per nome
+    // Recupera componenti per nome
     public List<ComponentProduct> searchComponentsByName(String name) {
         return componentRepository.findByNameContainingIgnoreCase(name);
     }
@@ -46,6 +47,7 @@ public class ComponentService {
 
     // Elimina componente per ID
     public void deleteComponent(Long id) {
-        componentRepository.deleteById(id);
+        ComponentProduct component = getComponentById(id);
+        componentRepository.delete(component);
     }
 }

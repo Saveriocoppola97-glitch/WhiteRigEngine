@@ -28,9 +28,7 @@ public class BuildController {
 
     @GetMapping("/{id}")
     public ResponseEntity<CustomBuild> getBuildById(@PathVariable Long id) {
-        return buildService.getBuildById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        return ResponseEntity.ok(buildService.getBuildById(id));
     }
 
     @GetMapping("/user/{userId}")
@@ -46,10 +44,7 @@ public class BuildController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteBuild(@PathVariable Long id) {
-        if (buildService.getBuildById(id).isPresent()) {
-            buildService.deleteBuild(id);
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.notFound().build();
+        buildService.deleteBuild(id);
+        return ResponseEntity.noContent().build();
     }
 }
