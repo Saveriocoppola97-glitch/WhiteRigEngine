@@ -1,7 +1,10 @@
 package save.WhiteRigEngine.config;
 
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import save.WhiteRigEngine.entities.BlogPost;
 import save.WhiteRigEngine.entities.ComponentProduct;
@@ -17,21 +20,33 @@ import java.math.BigDecimal;
 @Component
 public class DatabaseSeeder implements CommandLineRunner {
 
+    @Value("${app.admin.username}")
+    private String adminUsername;
+
+    @Value("${app.admin.email}")
+    private String adminEmail;
+
+    @Value("${app.admin.password}")
+    private String adminPassword;
+
     private final ComponentRepository componentRepository;
     private final UserRepository userRepository;
     private final BlogPostRepository blogPostRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
     public DatabaseSeeder(ComponentRepository componentRepository,
                           UserRepository userRepository,
-                          BlogPostRepository blogPostRepository) {
+                          BlogPostRepository blogPostRepository,
+                          PasswordEncoder passwordEncoder) {
         this.componentRepository = componentRepository;
         this.userRepository = userRepository;
         this.blogPostRepository = blogPostRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
-    public void run(String... args) {
+    public void run(String @NonNull ... args) {
         if (componentRepository.count() == 0) {
             componentRepository.save(new ComponentProduct(
                     null,
@@ -59,9 +74,9 @@ public class DatabaseSeeder implements CommandLineRunner {
         if (userRepository.count() == 0) {
             userRepository.save(new User(
                     null,
-                    "admin",
-                    "admin@whiterig.it",
-                    "admin123",
+                    adminUsername,
+                    adminEmail,
+                    passwordEncoder.encode(adminPassword),
                     Role.ADMIN
             ));
         }
@@ -71,7 +86,7 @@ public class DatabaseSeeder implements CommandLineRunner {
                     null,
                     "Benvenuti su WhiteRig Engine!",
                     "Questo blog racchiude la mia passione per l'hardware e il mondo dei PC Custom.",
-                    "Saverio",
+                    adminUsername,
                     "https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=500",
                     null
             ));
