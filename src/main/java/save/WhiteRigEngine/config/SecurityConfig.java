@@ -37,13 +37,18 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        // Endpoint di autenticazione pubblici
+                        // Endpoint Swagger / OpenAPI pubblici
+                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+
+                        // Endpoint di autenticazione pubblica
                         .requestMatchers("/api/auth/**").permitAll()
+
                         // Lettura pubblica dei prodotti, del blog e delle build
                         .requestMatchers(HttpMethod.GET, "/api/components/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/blog/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/builds/**").permitAll()
-                        // Creazione, modifica e cancellazione richiedono autenticazione JWT
+
+                        // gli altri richiedono autenticazione JWT
                         .anyRequest().authenticated()
                 );
 
