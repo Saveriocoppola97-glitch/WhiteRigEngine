@@ -88,7 +88,7 @@ public class DatabaseSeeder implements CommandLineRunner {
                     20
             ));
 
-            // 4. MOTHERBOARD (AM5, DDR5, ATX)
+            // 4. MOTHERBOARD 
             componentRepository.save(new ComponentProduct(
                     null,
                     "ROG Strix B650-A Gaming WiFi",
