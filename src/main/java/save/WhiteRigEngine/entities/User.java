@@ -1,10 +1,11 @@
 package save.WhiteRigEngine.entities;
+import save.WhiteRigEngine.model.Role;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import save.WhiteRigEngine.model.Role;
+
 
 @Entity
 @Table(name = "users")
