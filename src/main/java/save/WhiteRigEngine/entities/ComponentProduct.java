@@ -35,6 +35,18 @@ public class ComponentProduct {
     @Column(length = 1000)
     private String description;
 
+    @Column(name = "wattage")
+    private Integer wattage;
+
+    @Column(name = "socket", length = 50)
+    private String socket;
+
+    @Column(name = "ram_type", length = 20)
+    private String ramType;
+
+    @Column(name = "form_factor", length = 50)
+    private String formFactor;
+
     private String imageUrl;
 
     private Integer stockQuantity;

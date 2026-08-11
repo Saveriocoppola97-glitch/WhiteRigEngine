@@ -167,6 +167,6 @@ public class DatabaseSeeder implements CommandLineRunner {
             ));
         }
 
-        System.out.println("Dati iniziali (Componenti per ogni categoria, User, Blog) caricati con successo!");
+        System.out.println("Dati iniziali caricati con successo!");
     }
 }
