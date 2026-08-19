@@ -166,6 +166,7 @@ public class DatabaseSeeder implements CommandLineRunner {
             ));
         }
 
+        // Blog d'esempio
         if (blogPostRepository.count() == 0) {
             blogPostRepository.save(new BlogPost(
                     null,
