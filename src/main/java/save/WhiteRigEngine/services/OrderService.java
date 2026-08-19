@@ -72,4 +72,8 @@ public class OrderService {
 
         return order;
     }
+    // Recupero gli ordini per email
+    public List<Order> getOrdersByUserEmail(String userEmail) {
+        return orderRepository.findByUserEmail(userEmail);
+    }
 }

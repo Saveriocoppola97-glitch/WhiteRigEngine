@@ -157,6 +157,8 @@ public class DatabaseSeeder implements CommandLineRunner {
         if (userRepository.count() == 0) {
             userRepository.save(new User(
                     null,
+                    "Saverio",
+                    "Casabianca",
                     adminUsername,
                     adminEmail,
                     passwordEncoder.encode(adminPassword),
