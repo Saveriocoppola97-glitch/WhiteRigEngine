@@ -242,7 +242,6 @@ function BackofficePage() {
               </Col>
             )}
 
-            {/* Tipo RAM: visibile solo per RAM, MOTHERBOARD e CPU */}
             {["RAM", "MOTHERBOARD", "CPU"].includes(formData.category) && (
               <Col md={3} className="mb-3">
                 <Form.Group>
@@ -257,7 +256,6 @@ function BackofficePage() {
               </Col>
             )}
 
-            {/* Form Factor: nascosto per le CPU */}
             {formData.category !== "CPU" && (
               <Col md={3} className="mb-3">
                 <Form.Group>
@@ -272,7 +270,6 @@ function BackofficePage() {
               </Col>
             )}
 
-            {/* Wattage: nascosto per i CASE */}
             {formData.category !== "CASE" && (
               <Col md={3} className="mb-3">
                 <Form.Group>

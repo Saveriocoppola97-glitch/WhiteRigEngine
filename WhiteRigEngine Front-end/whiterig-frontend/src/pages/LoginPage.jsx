@@ -14,23 +14,22 @@ function LoginPage() {
     e.preventDefault();
     setError(null);
     setLoading(true);
-
     try {
       await loginUser({ username, password });
       setLoading(false);
       navigate("/");
     } catch {
       setLoading(false);
-      setError("Username o password errati. Riprova.");
+      setError("Username o password errati.");
     }
   };
 
   return (
     <Container className="mt-5">
       <Row className="justify-content-center">
-        <Col md={6} lg={4}>
-          <div className="p-4 border rounded shadow-sm bg-white">
-            <h3 className="text-center mb-4">Accedi</h3>
+        <Col md={6} lg={6}>
+          <div className="p-4 border rounded shadow-lg bg-white">
+            <h3 className="text-center mb-3">Accedi</h3>
             {error && <Alert variant="danger">{error}</Alert>}
             <Form onSubmit={handleSubmit}>
               <Form.Group className="mb-3" controlId="formUsername">
