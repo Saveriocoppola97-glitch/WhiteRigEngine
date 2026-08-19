@@ -1,15 +1,21 @@
 import { Navbar, Container, Nav, Button } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
-import { logoutUser, getToken } from "../services/authService";
+import {
+  logoutUser,
+  getToken,
+  andrebbeBeneAdmin,
+} from "../services/authService";
 import { useState, useEffect } from "react";
 
 function MyNavbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(!!getToken());
+  const [isAdmin, setIsAdmin] = useState(andrebbeBeneAdmin());
   const navigate = useNavigate();
 
   useEffect(() => {
     const handleAuthChange = () => {
       setIsLoggedIn(!!getToken());
+      setIsAdmin(andrebbeBeneAdmin());
     };
     window.addEventListener("auth-change", handleAuthChange);
 
@@ -35,6 +41,16 @@ function MyNavbar() {
             <Nav.Link as={Link} to="/">
               Home
             </Nav.Link>
+
+            {isLoggedIn && isAdmin && (
+              <Nav.Link
+                as={Link}
+                to="/backoffice"
+                className="text-warning fw-bold"
+              >
+                Backoffice 🛠️
+              </Nav.Link>
+            )}
 
             {isLoggedIn ? (
               <Button variant="outline-danger" size="sm" onClick={handleLogout}>

@@ -21,10 +21,10 @@ function RegisterPage() {
     try {
       await registerUser({ username, email, password, name, surname });
       setLoading(false);
-      navigate("/login"); // Reindirizza al login dopo il successo!
+      navigate("/login");
     } catch (err) {
       setLoading(false);
-      setError(err.message || "Registrazione fallita.");
+      setError(err.message || "Registrazione fallita. Riprova.");
     }
   };
 

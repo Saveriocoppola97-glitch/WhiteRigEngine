@@ -40,7 +40,11 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<String> registerUser(@RequestBody RegisterDTO registerDTO) {
         if (userRepository.findByUsername(registerDTO.getUsername()).isPresent()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Errore: Username già in uso!");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Username già in uso!");
+        }
+
+        if (userRepository.findByEmail(registerDTO.getEmail()).isPresent()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email già in uso!");
         }
 
         User user = new User();
