@@ -207,7 +207,7 @@ function BackofficePage() {
           </Row>
 
           <Form.Group className="mb-3">
-            <Form.Label>Immagine del Componente (da PC)</Form.Label>
+            <Form.Label>Immagine del Componente</Form.Label>
             <Form.Control
               type="file"
               accept="image/*"
@@ -227,7 +227,6 @@ function BackofficePage() {
           </Form.Group>
 
           <Row>
-            {/* Socket: visibile per CPU, MOTHERBOARD e COOLING */}
             {["CPU", "MOTHERBOARD", "COOLING"].includes(formData.category) && (
               <Col md={3} className="mb-3">
                 <Form.Group>
@@ -256,16 +255,22 @@ function BackofficePage() {
               </Col>
             )}
 
-            {formData.category !== "CPU" && (
+            {formData.category !== "CPU" && formData.category !== "STORAGE" && (
               <Col md={3} className="mb-3">
                 <Form.Group>
                   <Form.Label>Form Factor</Form.Label>
-                  <Form.Control
-                    type="text"
+                  <Form.Select
                     name="formFactor"
                     value={formData.formFactor}
                     onChange={handleChange}
-                  />
+                  >
+                    <option value="">Seleziona Form Factor...</option>
+                    <option value="ATX">ATX</option>
+                    <option value="Micro-ATX">Micro-ATX (mATX)</option>
+                    <option value="Mini-ITX">Mini-ITX</option>
+                    <option value="E-ATX">E-ATX</option>
+                    <option value="EEB">EEB</option>
+                  </Form.Select>
                 </Form.Group>
               </Col>
             )}

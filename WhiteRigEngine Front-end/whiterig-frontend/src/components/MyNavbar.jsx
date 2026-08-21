@@ -1,4 +1,4 @@
-import { Navbar, Container, Nav, Button } from "react-bootstrap";
+import { Navbar, Container, Nav, Button, NavDropdown } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import {
   logoutUser,
@@ -46,13 +46,19 @@ function MyNavbar() {
             </Nav.Link>
 
             {isLoggedIn && isAdmin && (
-              <Nav.Link
-                as={Link}
-                to="/backoffice"
+              <NavDropdown
+                title="Backoffice"
+                id="admin-backoffice-dropdown"
+                menuVariant="dark"
                 className="text-warning fw-bold"
               >
-                Backoffice
-              </Nav.Link>
+                <NavDropdown.Item as={Link} to="/backoffice/add">
+                  ➕ Aggiungi Prodotto
+                </NavDropdown.Item>
+                <NavDropdown.Item as={Link} to="/backoffice/manage">
+                  ✏️ Modifica / Gestisci Prodotti
+                </NavDropdown.Item>
+              </NavDropdown>
             )}
 
             {isLoggedIn ? (

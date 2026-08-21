@@ -6,6 +6,7 @@ import RegisterPage from "./pages/RegisterPage";
 import BackofficePage from "./pages/BackofficePage";
 import BlogPage from "./pages/BlogPage";
 import BlogDetailPage from "./pages/BlogDetailPage";
+import ManageComponents from "./pages/ManageComponents";
 
 function App() {
   return (
@@ -16,9 +17,10 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
-          <Route path="/backoffice" element={<BackofficePage />} />
           <Route path="/blog" element={<BlogPage />} />
           <Route path="/blog/:id" element={<BlogDetailPage />} />
+          <Route path="/backoffice/manage" element={<ManageComponents />} />
+          <Route path="/backoffice/add" element={<BackofficePage />} />
         </Routes>
       </div>
     </Router>
