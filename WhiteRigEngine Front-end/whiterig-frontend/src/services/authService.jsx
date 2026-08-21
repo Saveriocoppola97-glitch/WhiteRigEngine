@@ -18,9 +18,20 @@ export const loginUser = async (credentials) => {
 
     if (data.token) {
       localStorage.setItem("token", data.token);
+
       if (data.role) {
         localStorage.setItem("role", data.role);
       }
+
+      if (data.username) {
+        localStorage.setItem("userEmail", data.username);
+      } else if (credentials.username || credentials.email) {
+        localStorage.setItem(
+          "userEmail",
+          credentials.username || credentials.email,
+        );
+      }
+
       window.dispatchEvent(new Event("auth-change"));
     }
 
@@ -52,6 +63,7 @@ export const registerUser = async (userData) => {
 export const logoutUser = () => {
   localStorage.removeItem("token");
   localStorage.removeItem("role");
+  localStorage.removeItem("userEmail");
   window.dispatchEvent(new Event("auth-change"));
 };
 

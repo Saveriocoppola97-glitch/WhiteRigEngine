@@ -1,6 +1,7 @@
 package save.WhiteRigEngine.controllers;
 
 import save.WhiteRigEngine.entities.Order;
+import save.WhiteRigEngine.model.CheckoutRequestDTO;
 import save.WhiteRigEngine.repositories.OrderRepository;
 import save.WhiteRigEngine.services.OrderService;
 import save.WhiteRigEngine.services.PdfService;
@@ -27,8 +28,8 @@ public class OrderController {
     private PdfService pdfService;
 
     @PostMapping("/checkout")
-    public ResponseEntity<Order> checkout(@RequestParam String userEmail) {
-        Order order = orderService.placeOrder(userEmail);
+    public ResponseEntity<Order> checkout(@RequestBody CheckoutRequestDTO checkoutRequest) {
+        Order order = orderService.placeOrderWithItems(checkoutRequest);
         return ResponseEntity.ok(order);
     }
 

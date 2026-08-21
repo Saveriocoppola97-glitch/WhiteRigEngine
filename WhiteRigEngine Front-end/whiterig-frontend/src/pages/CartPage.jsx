@@ -6,9 +6,12 @@ import {
   Button,
   Table,
   Alert,
+  Spinner,
 } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
+import { useState } from "react";
+import { checkoutOrder } from "../services/orderService";
 
 function CartPage() {
   const {
@@ -19,6 +22,38 @@ function CartPage() {
     clearCart,
     totalAmount,
   } = useCart();
+
+  const [loadingCheckout, setLoadingCheckout] = useState(false);
+  const [checkoutError, setCheckoutError] = useState(null);
+  const navigate = useNavigate();
+
+  const handleCheckout = async () => {
+    // 1. Leggiamo l'email (o username) direttamente dal localStorage
+    const userEmail = localStorage.getItem("userEmail");
+
+    if (!userEmail) {
+      alert("Devi effettuare l'accesso per completare l'ordine.");
+      navigate("/login");
+      return;
+    }
+
+    try {
+      setLoadingCheckout(true);
+      setCheckoutError(null);
+
+      // 2. Chiamata al servizio passando sia l'email che gli articoli del carrello
+      const order = await checkoutOrder(userEmail, cartItems);
+
+      clearCart();
+      alert(`Ordine completato con successo! 🎉 ID Ordine: #${order.id}`);
+      navigate("/");
+    } catch (err) {
+      console.error("Errore durante il checkout:", err);
+      setCheckoutError(err.message || "Errore durante il checkout. Riprova.");
+    } finally {
+      setLoadingCheckout(false);
+    }
+  };
 
   if (cartItems.length === 0) {
     return (
@@ -40,6 +75,13 @@ function CartPage() {
   return (
     <Container className="my-5">
       <h2 className="mb-4 fw-bold">Carrello Acquisti</h2>
+
+      {checkoutError && (
+        <Alert variant="danger" className="mb-4">
+          {checkoutError}
+        </Alert>
+      )}
+
       <Row>
         <Col lg={8} className="mb-4">
           <Card className="shadow-sm border-0 rounded-4 p-3">
@@ -156,9 +198,17 @@ function CartPage() {
               variant="dark"
               size="lg"
               className="w-100 fw-bold shadow-sm"
-              onClick={() => alert("Funzionalità di checkout in arrivo!")}
+              onClick={handleCheckout}
+              disabled={loadingCheckout}
             >
-              Procedi al Checkout 🚀
+              {loadingCheckout ? (
+                <>
+                  <Spinner animation="border" size="sm" className="me-2" />
+                  Elaborazione...
+                </>
+              ) : (
+                "Procedi al Checkout"
+              )}
             </Button>
           </Card>
         </Col>
