@@ -34,4 +34,9 @@ public class BlogPostController {
     public ResponseEntity<BlogPost> createPost(@RequestBody BlogPost post) {
         return ResponseEntity.status(HttpStatus.CREATED).body(blogPostService.savePost(post));
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<BlogPost> updatePost(@PathVariable Long id, @RequestBody BlogPost post) {
+        return ResponseEntity.ok(blogPostService.updatePost(id, post));
+    }
 }

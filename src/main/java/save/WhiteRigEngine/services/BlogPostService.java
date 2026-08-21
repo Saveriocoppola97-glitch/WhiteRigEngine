@@ -35,4 +35,13 @@ public class BlogPostService {
         BlogPost post = getPostById(id);
         blogPostRepository.delete(post);
     }
+
+    public BlogPost updatePost(Long id, BlogPost updatedPost) {
+        BlogPost post = getPostById(id);
+        post.setTitle(updatedPost.getTitle());
+        post.setContent(updatedPost.getContent());
+        post.setAuthor(updatedPost.getAuthor());
+        post.setCoverImageUrl(updatedPost.getCoverImageUrl());
+        return blogPostRepository.save(post);
+    }
 }

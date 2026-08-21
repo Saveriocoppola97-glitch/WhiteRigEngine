@@ -41,6 +41,9 @@ function MyNavbar() {
             <Nav.Link as={Link} to="/">
               Home
             </Nav.Link>
+            <Nav.Link as={Link} to="/blog">
+              Blog & Guide
+            </Nav.Link>
 
             {isLoggedIn && isAdmin && (
               <Nav.Link
@@ -48,7 +51,7 @@ function MyNavbar() {
                 to="/backoffice"
                 className="text-warning fw-bold"
               >
-                Backoffice 🛠️
+                Backoffice
               </Nav.Link>
             )}
 
