@@ -12,12 +12,16 @@ import {
 } from "react-bootstrap";
 import { getAllComponents } from "../services/componentService";
 import { Link } from "react-router-dom";
+import { useCart } from "../context/CartContext"; // Importiamo l'hook del carrello
 
 function Home() {
   const [products, setProducts] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("ALL");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  // Estraiamo la funzione addToCart dal contesto globale
+  const { addToCart } = useCart();
 
   const categories = [
     { key: "ALL", label: "Tutti i Prodotti" },
@@ -49,7 +53,7 @@ function Home() {
   }, [selectedCategory]);
 
   const handleAddToCart = (product) => {
-    console.log("Aggiunto al carrello:", product);
+    addToCart(product);
   };
 
   return (

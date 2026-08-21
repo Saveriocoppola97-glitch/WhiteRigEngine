@@ -1,4 +1,11 @@
-import { Navbar, Container, Nav, Button, NavDropdown } from "react-bootstrap";
+import {
+  Navbar,
+  Container,
+  Nav,
+  Button,
+  NavDropdown,
+  Badge,
+} from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import {
   logoutUser,
@@ -6,11 +13,15 @@ import {
   andrebbeBeneAdmin,
 } from "../services/authService";
 import { useState, useEffect } from "react";
+import { useCart } from "../context/CartContext"; // Importiamo l'hook del carrello
 
 function MyNavbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(!!getToken());
   const [isAdmin, setIsAdmin] = useState(andrebbeBeneAdmin());
   const navigate = useNavigate();
+
+  // Estraiamo il numero totale di elementi nel carrello dal contesto
+  const { totalItemsCount } = useCart();
 
   useEffect(() => {
     const handleAuthChange = () => {
@@ -43,6 +54,25 @@ function MyNavbar() {
             </Nav.Link>
             <Nav.Link as={Link} to="/blog">
               Blog & Guide
+            </Nav.Link>
+
+            {/* Link alla futura pagina del carrello con Badge dinamico */}
+            <Nav.Link
+              as={Link}
+              to="/cart"
+              className="position-relative text-white fw-semibold px-3"
+            >
+              🛒 Carrello
+              {totalItemsCount > 0 && (
+                <Badge
+                  bg="warning"
+                  text="dark"
+                  pill
+                  className="position-absolute top-0 start-100 translate-middle"
+                >
+                  {totalItemsCount}
+                </Badge>
+              )}
             </Nav.Link>
 
             {isLoggedIn && isAdmin && (

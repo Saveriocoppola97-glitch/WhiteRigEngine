@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { CartProvider } from "./context/CartContext"; // Importiamo il CartProvider
 import MyNavbar from "./components/MyNavbar";
 import Home from "./pages/Home";
 import LoginPage from "./pages/LoginPage";
@@ -7,23 +8,27 @@ import BackofficePage from "./pages/BackofficePage";
 import BlogPage from "./pages/BlogPage";
 import BlogDetailPage from "./pages/BlogDetailPage";
 import ManageComponents from "./pages/ManageComponents";
+import CartPage from "./pages/CartPage";
 
 function App() {
   return (
-    <Router>
-      <div className="bg-white min-vh-100">
-        <MyNavbar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/blog" element={<BlogPage />} />
-          <Route path="/blog/:id" element={<BlogDetailPage />} />
-          <Route path="/backoffice/manage" element={<ManageComponents />} />
-          <Route path="/backoffice/add" element={<BackofficePage />} />
-        </Routes>
-      </div>
-    </Router>
+    <CartProvider>
+      <Router>
+        <div className="bg-white min-vh-100">
+          <MyNavbar />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/blog" element={<BlogPage />} />
+            <Route path="/blog/:id" element={<BlogDetailPage />} />
+            <Route path="/backoffice/manage" element={<ManageComponents />} />
+            <Route path="/backoffice/add" element={<BackofficePage />} />
+            <Route path="/cart" element={<CartPage />} />
+          </Routes>
+        </div>
+      </Router>
+    </CartProvider>
   );
 }
 
