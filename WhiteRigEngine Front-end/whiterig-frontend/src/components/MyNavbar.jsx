@@ -52,11 +52,12 @@ function MyNavbar() {
             <Nav.Link as={Link} to="/">
               Home
             </Nav.Link>
+            <Nav.Link as={Link} to="/me">
+              Chi sono
+            </Nav.Link>
             <Nav.Link as={Link} to="/blog">
               Blog & Guide
             </Nav.Link>
-
-            {/* Link alla futura pagina del carrello con Badge dinamico */}
             <Nav.Link
               as={Link}
               to="/cart"

@@ -38,13 +38,13 @@ public class ComponentProduct {
     @Column(name = "wattage")
     private Integer wattage;
 
-    @Column(name = "socket", length = 50)
+    @Column(name = "socket", length = 10)
     private String socket;
 
-    @Column(name = "ram_type", length = 20)
+    @Column(name = "ram_type", length = 10)
     private String ramType;
 
-    @Column(name = "form_factor", length = 50)
+    @Column(name = "form_factor", length = 10)
     private String formFactor;
 
     private String imageUrl;
