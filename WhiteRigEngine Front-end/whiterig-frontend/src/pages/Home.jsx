@@ -39,7 +39,7 @@ function Home() {
       setProducts(data);
     } catch {
       setError(
-        "Impossibile caricare il catalogo prodotti dal server. Verifica che il backend sia attivo.",
+        "Impossibile caricare il catalogo. Verifica che il sitoweb sia attivo.",
       );
     } finally {
       setLoading(false);

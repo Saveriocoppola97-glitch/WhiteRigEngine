@@ -134,7 +134,6 @@ public class ComponentController {
             @RequestBody ComponentProduct componentDetails) {
 
         ComponentProduct existingComponent = componentService.getComponentById(id);
-
         existingComponent.setName(componentDetails.getName());
         existingComponent.setBrand(componentDetails.getBrand());
         existingComponent.setPrice(componentDetails.getPrice());

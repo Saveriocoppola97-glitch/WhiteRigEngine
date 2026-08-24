@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+
 import {
   Container,
   Table,
@@ -8,11 +9,13 @@ import {
   Modal,
   Form,
 } from "react-bootstrap";
+
 import {
   getAllComponents,
   updateComponent,
   deleteComponent,
 } from "../services/componentService";
+
 import { getToken } from "../services/authService";
 
 function ManageComponents() {
@@ -22,52 +25,88 @@ function ManageComponents() {
   const [showModal, setShowModal] = useState(false);
   const [currentProduct, setCurrentProduct] = useState(null);
 
+  // Caricamento iniziale dei componenti
+  useEffect(() => {
+    const loadProducts = async () => {
+      try {
+        setLoading(true);
+
+        const data = await getAllComponents();
+
+        setProducts(data);
+        setError(null);
+      } catch (err) {
+        setError("Impossibile caricare/modificare i componenti.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadProducts();
+  }, []);
+
+  // Ricarica i prodotti dopo modifica/eliminazione
   const fetchProducts = async () => {
     try {
       setLoading(true);
+
       const data = await getAllComponents();
+
       setProducts(data);
       setError(null);
-    } catch {
-      setError("Impossibile caricare i componenti dal server.");
+    } catch (err) {
+      setError("Impossibile caricare/modificare i componenti.");
     } finally {
       setLoading(false);
     }
   };
 
-  useEffect(() => {
-    fetchProducts();
-  }, []);
-
+  // Apertura modal modifica
   const handleEditClick = (product) => {
     setCurrentProduct({ ...product });
     setShowModal(true);
   };
 
+  // Gestione modifiche del form
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setCurrentProduct({ ...currentProduct, [name]: value });
+
+    setCurrentProduct({
+      ...currentProduct,
+      [name]: value,
+    });
   };
 
+  // Salvataggio modifiche
   const handleSave = async (e) => {
     e.preventDefault();
+
     const token = getToken();
+
     try {
       await updateComponent(currentProduct.id, currentProduct, token);
+
       setShowModal(false);
-      fetchProducts();
+      setCurrentProduct(null);
+
+      await fetchProducts();
     } catch (err) {
       alert("Errore durante il salvataggio: " + err.message);
     }
   };
 
+  // Eliminazione componente
   const handleDelete = async (id) => {
-    if (!window.confirm("Sei sicuro di voler eliminare questo componente?"))
+    if (!window.confirm("Sei sicuro di voler eliminare questo componente?")) {
       return;
+    }
+
     const token = getToken();
+
     try {
       await deleteComponent(id, token);
-      fetchProducts();
+
+      await fetchProducts();
     } catch (err) {
       alert("Errore durante l'eliminazione: " + err.message);
     }
@@ -77,6 +116,7 @@ function ManageComponents() {
     <Container className="py-5">
       <h2 className="mb-4 fw-bold">⚙️ Gestione e Modifica Componenti</h2>
 
+      {/* Loading */}
       {loading && (
         <div className="text-center my-5">
           <Spinner animation="border" variant="dark" />
@@ -84,8 +124,10 @@ function ManageComponents() {
         </div>
       )}
 
+      {/* Errore */}
       {error && <Alert variant="danger">{error}</Alert>}
 
+      {/* Tabella */}
       {!loading && !error && (
         <Table
           striped
@@ -105,6 +147,7 @@ function ManageComponents() {
               <th className="text-center">Azioni</th>
             </tr>
           </thead>
+
           <tbody>
             {products.map((product) => (
               <tr key={product.id}>
@@ -122,11 +165,17 @@ function ManageComponents() {
                     }}
                   />
                 </td>
+
                 <td className="fw-semibold">{product.name}</td>
+
                 <td>{product.brand}</td>
+
                 <td>{product.category}</td>
+
                 <td>€ {Number(product.price).toFixed(2)}</td>
+
                 <td>{product.stockQuantity} pz</td>
+
                 <td className="text-center">
                   <Button
                     variant="outline-primary"
@@ -136,6 +185,7 @@ function ManageComponents() {
                   >
                     ✏️ Modifica
                   </Button>
+
                   <Button
                     variant="outline-danger"
                     size="sm"
@@ -150,6 +200,7 @@ function ManageComponents() {
         </Table>
       )}
 
+      {/* Modal modifica */}
       {currentProduct && (
         <Modal show={showModal} onHide={() => setShowModal(false)} size="lg">
           <Modal.Header closeButton>
@@ -157,10 +208,13 @@ function ManageComponents() {
               Modifica Componente: {currentProduct.name}
             </Modal.Title>
           </Modal.Header>
+
           <Form onSubmit={handleSave}>
             <Modal.Body>
+              {/* Nome */}
               <Form.Group className="mb-3">
                 <Form.Label>Nome Componente</Form.Label>
+
                 <Form.Control
                   type="text"
                   name="name"
@@ -170,8 +224,10 @@ function ManageComponents() {
                 />
               </Form.Group>
 
+              {/* Brand */}
               <Form.Group className="mb-3">
                 <Form.Label>Brand</Form.Label>
+
                 <Form.Control
                   type="text"
                   name="brand"
@@ -181,8 +237,10 @@ function ManageComponents() {
                 />
               </Form.Group>
 
+              {/* Prezzo */}
               <Form.Group className="mb-3">
                 <Form.Label>Prezzo (€)</Form.Label>
+
                 <Form.Control
                   type="number"
                   step="0.01"
@@ -193,8 +251,10 @@ function ManageComponents() {
                 />
               </Form.Group>
 
+              {/* Stock */}
               <Form.Group className="mb-3">
                 <Form.Label>Quantità in Stock</Form.Label>
+
                 <Form.Control
                   type="number"
                   name="stockQuantity"
@@ -204,8 +264,10 @@ function ManageComponents() {
                 />
               </Form.Group>
 
+              {/* Immagine */}
               <Form.Group className="mb-3">
                 <Form.Label>URL Immagine</Form.Label>
+
                 <Form.Control
                   type="text"
                   name="imageUrl"
@@ -214,8 +276,10 @@ function ManageComponents() {
                 />
               </Form.Group>
 
+              {/* Descrizione */}
               <Form.Group className="mb-3">
                 <Form.Label>Descrizione</Form.Label>
+
                 <Form.Control
                   as="textarea"
                   rows={3}
@@ -225,10 +289,18 @@ function ManageComponents() {
                 />
               </Form.Group>
             </Modal.Body>
+
             <Modal.Footer>
-              <Button variant="secondary" onClick={() => setShowModal(false)}>
+              <Button
+                variant="secondary"
+                onClick={() => {
+                  setShowModal(false);
+                  setCurrentProduct(null);
+                }}
+              >
                 Annulla
               </Button>
+
               <Button variant="dark" type="submit">
                 Salva Modifiche
               </Button>
