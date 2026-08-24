@@ -49,3 +49,31 @@ export const getUserOrders = async () => {
 
   return await response.json();
 };
+
+// FUNZIONE PER SCARICARE/VISUALIZZARE IL PDF DELL'ORDINE
+export const downloadOrderPdf = async (orderId) => {
+  const token = getToken();
+
+  const response = await fetch(`${API_URL}/${orderId}/pdf`, {
+    method: "GET",
+    headers: {
+      ...(token && { Authorization: `Bearer ${token}` }),
+    },
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(
+      errorText || "Errore durante il download del PDF dell'ordine.",
+    );
+  }
+
+  // Converto la risposta in un blob PDF
+  const blob = await response.blob();
+
+  // Creo un URL locale temporaneo
+  const blobUrl = window.URL.createObjectURL(blob);
+
+  // Apro il PDF direttamente nel browser (pronto per la stampa/salvataggio)
+  window.open(blobUrl, "_blank");
+};

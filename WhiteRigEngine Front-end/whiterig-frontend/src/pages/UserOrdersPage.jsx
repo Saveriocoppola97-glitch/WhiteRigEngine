@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getUserOrders } from "../services/orderService";
+import { getUserOrders, downloadOrderPdf } from "../services/orderService";
 
 export default function UserOrders() {
   const [orders, setOrders] = useState([]);
@@ -21,6 +21,15 @@ export default function UserOrders() {
 
     fetchOrders();
   }, []);
+
+  const handleDownloadPdf = async (orderId) => {
+    try {
+      await downloadOrderPdf(orderId);
+    } catch (err) {
+      console.error("Errore durante il download del PDF:", err);
+      alert("Impossibile scaricare il PDF dell'ordine.");
+    }
+  };
 
   if (loading)
     return (
@@ -46,6 +55,7 @@ export default function UserOrders() {
                 <th>Totale</th>
                 <th>Stato</th>
                 <th>Dettagli Prodotti</th>
+                <th className="text-center">Azioni</th>
               </tr>
             </thead>
             <tbody>
@@ -70,6 +80,14 @@ export default function UserOrders() {
                           </li>
                         ))}
                     </ul>
+                  </td>
+                  <td className="text-center">
+                    <button
+                      className="btn btn-outline-primary btn-sm"
+                      onClick={() => handleDownloadPdf(order.id)}
+                    >
+                      Dettagli
+                    </button>
                   </td>
                 </tr>
               ))}
