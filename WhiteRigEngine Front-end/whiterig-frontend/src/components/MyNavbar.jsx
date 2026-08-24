@@ -1,11 +1,4 @@
-import {
-  Navbar,
-  Container,
-  Nav,
-  Button,
-  NavDropdown,
-  Badge,
-} from "react-bootstrap";
+import { Navbar, Container, Nav, NavDropdown, Badge } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import {
   logoutUser,
@@ -13,14 +6,13 @@ import {
   andrebbeBeneAdmin,
 } from "../services/authService";
 import { useState, useEffect } from "react";
-import { useCart } from "../context/CartContext"; // Importiamo l'hook del carrello
+import { useCart } from "../context/CartContext";
 
 function MyNavbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(!!getToken());
   const [isAdmin, setIsAdmin] = useState(andrebbeBeneAdmin());
   const navigate = useNavigate();
 
-  // Estraiamo il numero totale di elementi nel carrello dal contesto
   const { totalItemsCount } = useCart();
 
   useEffect(() => {
@@ -93,9 +85,22 @@ function MyNavbar() {
             )}
 
             {isLoggedIn ? (
-              <Button variant="outline-danger" size="sm" onClick={handleLogout}>
-                Logout
-              </Button>
+              <NavDropdown
+                title="Il mio account"
+                id="user-account-dropdown"
+                menuVariant="dark"
+              >
+                <NavDropdown.Item as={Link} to="/my-orders">
+                  📦 I miei ordini
+                </NavDropdown.Item>
+                <NavDropdown.Divider />
+                <NavDropdown.Item
+                  onClick={handleLogout}
+                  className="text-danger"
+                >
+                  🚪 Logout
+                </NavDropdown.Item>
+              </NavDropdown>
             ) : (
               <>
                 <Nav.Link as={Link} to="/login">

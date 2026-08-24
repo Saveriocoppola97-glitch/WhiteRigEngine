@@ -10,6 +10,7 @@ import BlogDetailPage from "./pages/BlogDetailPage";
 import ManageComponents from "./pages/ManageComponents";
 import CartPage from "./pages/CartPage";
 import MePage from "./pages/MePage";
+import UserOrdersPage from "./pages/UserOrdersPage";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
             <Route path="/backoffice/add" element={<BackofficePage />} />
             <Route path="/cart" element={<CartPage />} />
             <Route path="/me" element={<MePage />} />
+            <Route path="/my-orders" element={<UserOrdersPage />} />
           </Routes>
         </div>
       </Router>

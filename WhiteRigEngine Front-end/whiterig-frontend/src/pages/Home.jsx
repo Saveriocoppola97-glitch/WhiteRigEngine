@@ -12,15 +12,13 @@ import {
 } from "react-bootstrap";
 import { getAllComponents } from "../services/componentService";
 import { Link } from "react-router-dom";
-import { useCart } from "../context/CartContext"; // Importiamo l'hook del carrello
+import { useCart } from "../context/CartContext";
 
 function Home() {
   const [products, setProducts] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("ALL");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  // Estraiamo la funzione addToCart dal contesto globale
   const { addToCart } = useCart();
 
   const categories = [
@@ -58,7 +56,7 @@ function Home() {
 
   return (
     <div>
-      <div className="bg-dark text-white py-5 mb-5 shadow-sm border-bottom border-secondary text-center">
+      <div className="bg-dark text-white py-3 mb-5 shadow-sm border-bottom border-secondary text-center">
         <Container className="py-4">
           <h1 className="display-4 fw-bold mb-3">
             Benvenuto in WhiteRigEngine

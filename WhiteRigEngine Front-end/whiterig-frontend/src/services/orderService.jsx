@@ -29,3 +29,23 @@ export const checkoutOrder = async (userEmail, cartItems) => {
 
   return await response.json();
 };
+
+// FUNZIONE PER RECUPERO ORDINI
+export const getUserOrders = async () => {
+  const token = getToken();
+
+  const response = await fetch(`${API_URL}/user`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      ...(token && { Authorization: `Bearer ${token}` }),
+    },
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(errorText || "Errore durante recupero degli ordini.");
+  }
+
+  return await response.json();
+};
