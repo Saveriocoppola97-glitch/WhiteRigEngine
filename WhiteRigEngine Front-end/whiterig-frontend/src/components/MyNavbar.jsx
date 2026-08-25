@@ -51,7 +51,7 @@ function MyNavbar() {
               objectFit: "contain",
               borderRadius: "8px",
               border: "3px solid #1d2125",
-              mixBlendMode: "screen", // Fa sparire la parte scura del JPEG integrandola con il #1d2125
+              mixBlendMode: "screen",
               filter: "contrast(3.5)",
             }}
             className="me-2"
