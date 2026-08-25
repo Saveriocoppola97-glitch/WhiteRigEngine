@@ -18,9 +18,8 @@ function BlogDetailPage() {
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  // Stati per il modale di modifica
   const [showEditModal, setShowEditModal] = useState(false);
+
   const [formData, setFormData] = useState({
     title: "",
     content: "",
@@ -102,17 +101,14 @@ function BlogDetailPage() {
   }
 
   return (
-    <Container className="my-5" style={{ maxWidth: "800px" }}>
-      <div className="d-flex justify-content-between align-items-center mb-4">
-        <Button as={Link} to="/blog" variant="outline-dark">
+    <Container className="my-5 " style={{ maxWidth: "800px" }}>
+      <div className="d-flex justify-content-between align-items-center mb-4 ">
+        <Button as={Link} to="/blog" className="pills-custom-overlay">
           ← Torna agli articoli
         </Button>
-
-        {/* Pulsante Modifica visibile solo all'Admin */}
         {isAdmin && (
           <Button
-            variant="warning"
-            className="fw-bold text-dark shadow-sm"
+            className="pills-custom-overlay"
             onClick={() => setShowEditModal(true)}
           >
             ✏️ Modifica Articolo
@@ -217,9 +213,9 @@ function BlogDetailPage() {
               Annulla
             </Button>
             <Button
-              variant="warning"
+              variant="secondary"
               type="submit"
-              className="fw-bold text-dark"
+              className="fw-bold text-light"
               disabled={submitting}
             >
               {submitting ? "Salvataggio..." : "Salva Modifiche"}

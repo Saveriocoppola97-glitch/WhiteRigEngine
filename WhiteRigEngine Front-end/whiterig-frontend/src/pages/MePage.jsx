@@ -14,7 +14,7 @@ const MePage = () => {
         <div className="col-md-6 mb-4 mb-md-0">
           <div className="p-4 bg-light rounded shadow-sm h-100">
             <h3 className="h4 fw-bold mb-3">Il mio percorso</h3>
-            <p className="text-secondary">
+            <p className="text-dark">
               Il mio viaggio nel mondo dell'informatica nasce dalla curiosità
               smisurata per come funzionano le cose, sia a livello hardware che
               software. Lavorando come tecnico informatico ho affinato la
@@ -28,7 +28,7 @@ const MePage = () => {
         <div className="col-md-6">
           <div className="p-4 bg-light rounded shadow-sm h-100">
             <h3 className="h4 fw-bold mb-3">Passioni e Motivazioni</h3>
-            <p className="text-secondary">
+            <p className="text-dark">
               Credo che la tecnologia debba essere funzionale, pulita e potente.
               Che si tratti di assemblare una build hardware custom o di
               progettare un'architettura backend con Spring Boot e React,

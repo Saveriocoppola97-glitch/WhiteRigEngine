@@ -92,7 +92,7 @@ function BlogPage() {
 
         {isAdmin && (
           <Button
-            variant="warning"
+            variant="secondary pills-custom-overlay"
             className="fw-bold text-dark shadow-sm"
             onClick={() => setShowModal(true)}
           >
@@ -214,9 +214,9 @@ function BlogPage() {
               Annulla
             </Button>
             <Button
-              variant="warning"
+              variant="secondary"
               type="submit"
-              className="fw-bold text-dark"
+              className="fw-bold text-light"
               disabled={submitting}
             >
               {submitting ? "Pubblicazione..." : "Pubblica Articolo"}

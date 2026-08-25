@@ -89,9 +89,10 @@ function Home() {
             Il tuo e-commerce e configuratore di PC custom di fiducia.
           </p>
           <Button
-            variant="warning"
+            variant="secondary"
             size="lg"
-            className="fw-bold text-dark px-4 shadow-sm"
+            className="fw-bold text-dark px-4 shadow-lg btn-custom-overlay"
+            style={{ backgroundColor: "#dbdada75" }}
           >
             Inizia la Configurazione
           </Button>
@@ -99,8 +100,8 @@ function Home() {
       </div>
 
       <Container className="mb-5">
-        <div className="d-flex justify-content-center mb-5 overflow-auto py-2">
-          <Nav variant="pills" className="gap-2 flex-nowrap">
+        <div className="d-flex justify-content-center mb-5 overflow-auto py-2 ">
+          <Nav variant="pills" className="gap-2 flex-nowrap ">
             {categories.map((cat) => (
               <Nav.Item key={cat.key}>
                 <Nav.Link
@@ -109,8 +110,8 @@ function Home() {
                     setLoading(true);
                     setSelectedCategory(cat.key);
                   }}
-                  className={`px-4 fw-semibold ${selectedCategory === cat.key ? "bg-dark text-white shadow-sm" : "text-dark bg-light"}`}
-                  style={{ cursor: "pointer" }}
+                  className={` pills-custom-overlay px-4 fw-semibold ${selectedCategory === cat.key ? "bg-dark text-white shadow-sm" : "text-dark"}`}
+                  style={{ cursor: "pointer", backgroundColor: "#dbdada75" }}
                 >
                   {cat.label}
                 </Nav.Link>
