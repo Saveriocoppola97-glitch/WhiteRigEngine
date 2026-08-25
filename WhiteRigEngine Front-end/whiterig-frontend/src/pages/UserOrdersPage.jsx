@@ -13,7 +13,7 @@ export default function UserOrders() {
         setOrders(data);
       } catch (err) {
         console.error("Errore nel recupero degli ordini:", err);
-        setError("Impossibile caricare la cronologia degli ordini.");
+        setError("Impossibile caricare cronologia ordini.");
       } finally {
         setLoading(false);
       }
@@ -47,14 +47,14 @@ export default function UserOrders() {
         </div>
       ) : (
         <div className="table-responsive">
-          <table className="table table-striped table-hover align-middle">
+          <table className="table table-striped table-hover align-middle text-center">
             <thead className="table-dark">
               <tr>
                 <th>ID Ordine</th>
                 <th>Data</th>
                 <th>Totale</th>
+                <th>Quantità</th>
                 <th>Stato</th>
-                <th>Dettagli Prodotti</th>
                 <th className="text-center">Azioni</th>
               </tr>
             </thead>
@@ -67,11 +67,6 @@ export default function UserOrders() {
                     € {order.totalPrice ? order.totalPrice.toFixed(2) : "N/D"}
                   </td>
                   <td>
-                    <span className="badge bg-success">
-                      {order.status || "Completato"}
-                    </span>
-                  </td>
-                  <td>
                     <ul className="list-unstyled mb-0">
                       {order.items &&
                         order.items.map((item, index) => (
@@ -80,6 +75,11 @@ export default function UserOrders() {
                           </li>
                         ))}
                     </ul>
+                  </td>
+                  <td>
+                    <span className="badge bg-success">
+                      {order.status || "Completato"}
+                    </span>
                   </td>
                   <td className="text-center">
                     <button
