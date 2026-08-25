@@ -13,11 +13,24 @@ export function CartProvider({ children }) {
     localStorage.setItem("whiterig_cart", JSON.stringify(cartItems));
   }, [cartItems]);
 
+  // Helper per ricavare l'ID univoco in modo coerente ovunque
+  const getItemId = (item) => {
+    if (!item) return null;
+    return item.id !== undefined
+      ? item.id
+      : item.componentId !== undefined
+        ? item.componentId
+        : item?.component?.id;
+  };
+
   const addToCart = (product) => {
     let warningMessage = null;
+    const productId = getItemId(product);
 
     setCartItems((prevItems) => {
-      const existingItem = prevItems.find((item) => item.id === product.id);
+      const existingItem = prevItems.find(
+        (item) => getItemId(item) === productId,
+      );
       const currentQty = existingItem ? existingItem.quantity : 0;
       const newQuantity = currentQty + 1;
 
@@ -27,22 +40,24 @@ export function CartProvider({ children }) {
       }
 
       if (newQuantity > product.stockQuantity) {
-        warningMessage = `Disponibilità massima raggiunta per ${product.name} (${product.stockQuantity} pezzi disponibili).`;
+        warningMessage = `Disponibilità massima raggiunta per ${product.name || "questo articolo"} (${product.stockQuantity} pezzi disponibili).`;
         return prevItems;
       }
 
-      const existingIndex = prevItems.findIndex(
-        (item) => item.id === product.id,
-      );
-
-      if (existingIndex > -1) {
-        return prevItems.map((item, index) =>
-          index === existingIndex
+      if (existingItem) {
+        return prevItems.map((item) =>
+          getItemId(item) === productId
             ? { ...item, quantity: item.quantity + 1 }
             : item,
         );
       } else {
-        return [...prevItems, { ...product, quantity: 1 }];
+        // Normalizziamo l'oggetto assicurandoci che abbia un .id di riferimento standard
+        const normalizedProduct = {
+          ...product,
+          id: productId,
+          quantity: 1,
+        };
+        return [...prevItems, normalizedProduct];
       }
     });
 
@@ -51,15 +66,7 @@ export function CartProvider({ children }) {
 
   const removeFromCart = (productId) => {
     setCartItems((prevItems) =>
-      prevItems.filter((item) => {
-        const currentId =
-          item.id !== undefined
-            ? item.id
-            : item.componentId !== undefined
-              ? item.componentId
-              : item?.component?.id;
-        return currentId !== productId;
-      }),
+      prevItems.filter((item) => getItemId(item) !== productId),
     );
   };
 
@@ -73,12 +80,7 @@ export function CartProvider({ children }) {
 
     setCartItems((prevItems) => {
       return prevItems.map((item) => {
-        const currentId =
-          item.id !== undefined
-            ? item.id
-            : item.componentId !== undefined
-              ? item.componentId
-              : item?.component?.id;
+        const currentId = getItemId(item);
 
         if (currentId === productId) {
           const maxStock =
