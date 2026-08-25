@@ -20,9 +20,21 @@ export function CartProvider({ children }) {
       );
       if (existingIndex > -1) {
         const updated = [...prevItems];
-        updated[existingIndex].quantity += 1;
+        const currentItem = updated[existingIndex];
+        if (currentItem.quantity + 1 > product.stockQuantity) {
+          alert(
+            `Disponibilità massima raggiunta per ${product.name} (${product.stockQuantity} pezzi disponibili).`,
+          );
+          return prevItems;
+        }
+
+        currentItem.quantity += 1;
         return updated;
       } else {
+        if (product.stockQuantity <= 0) {
+          alert("Spiacenti, questo prodotto è esaurito.");
+          return prevItems;
+        }
         return [...prevItems, { ...product, quantity: 1 }];
       }
     });
@@ -39,10 +51,20 @@ export function CartProvider({ children }) {
       removeFromCart(productId);
       return;
     }
+
     setCartItems((prevItems) =>
-      prevItems.map((item) =>
-        item.id === productId ? { ...item, quantity } : item,
-      ),
+      prevItems.map((item) => {
+        if (item.id === productId) {
+          if (quantity > item.stockQuantity) {
+            alert(
+              `Disponibilità massima raggiunta (${item.stockQuantity} pezzi).`,
+            );
+            return { ...item, quantity: item.stockQuantity };
+          }
+          return { ...item, quantity };
+        }
+        return item;
+      }),
     );
   };
 

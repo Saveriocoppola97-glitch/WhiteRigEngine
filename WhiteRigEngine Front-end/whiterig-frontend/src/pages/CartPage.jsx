@@ -28,7 +28,6 @@ function CartPage() {
   const navigate = useNavigate();
 
   const handleCheckout = async () => {
-    // 1. Leggiamo l'email (o username) direttamente dal localStorage
     const userEmail = localStorage.getItem("userEmail");
 
     if (!userEmail) {
@@ -41,7 +40,6 @@ function CartPage() {
       setLoadingCheckout(true);
       setCheckoutError(null);
 
-      // 2. Chiamata al servizio passando sia l'email che gli articoli del carrello
       const order = await checkoutOrder(userEmail, cartItems);
 
       clearCart();

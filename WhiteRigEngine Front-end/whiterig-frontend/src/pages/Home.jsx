@@ -146,7 +146,7 @@ function Home() {
                   </Card.Subtitle>
 
                   <div className="mt-auto">
-                    <div className="d-flex justify-content-between align-items-center mb-3">
+                    <div className="d-flex justify-content-between align-items-center mb-2">
                       <span className="fs-5 fw-bold text-dark">
                         €{" "}
                         {product.price
@@ -154,6 +154,22 @@ function Home() {
                           : "0.00"}
                       </span>
                     </div>
+
+                    {/* Disponibitlià */}
+                    <div className="mb-2 small">
+                      {product.stockQuantity > 0 ? (
+                        <small
+                          className={`fw-semibold ${product.stockQuantity <= 5 ? "text-danger" : "text-muted"}`}
+                        >
+                          📦 Disponibili: {product.stockQuantity} pezzi
+                        </small>
+                      ) : (
+                        <small className="text-danger fw-semibold">
+                          ❌ Prodotto esaurito
+                        </small>
+                      )}
+                    </div>
+
                     <div className="d-grid gap-2">
                       <Button
                         variant="outline-dark"
