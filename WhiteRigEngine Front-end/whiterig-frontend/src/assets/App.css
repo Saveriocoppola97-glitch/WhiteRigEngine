@@ -1,0 +1,14 @@
+.tech-toast {
+  font-family: "Outfit", sans-serif !important;
+  border-radius: 1em !important;
+  overflow: hidden;
+}
+
+.tech-toast .toast-body {
+  font-family: "Outfit", sans-serif !important;
+  font-weight: 500;
+  background-color: #212529 !important;
+  color: #f8f9fa !important;
+  padding: 1rem 1.25rem !important;
+  letter-spacing: 0.3px;
+}

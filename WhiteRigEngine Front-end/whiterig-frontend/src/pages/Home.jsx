@@ -9,10 +9,13 @@ import {
   Alert,
   Badge,
   Nav,
+  Toast,
+  ToastContainer,
 } from "react-bootstrap";
 import { getAllComponents } from "../services/componentService";
 import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
+import "../assets/App.css";
 
 function Home() {
   const [products, setProducts] = useState([]);
@@ -20,6 +23,8 @@ function Home() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { addToCart } = useCart();
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
 
   const categories = [
     { key: "ALL", label: "Tutti i Prodotti" },
@@ -52,10 +57,29 @@ function Home() {
 
   const handleAddToCart = (product) => {
     addToCart(product);
+    setToastMessage(`"${product.name}" è stato aggiunto al carrello!`);
+    setShowToast(true);
   };
 
   return (
     <div>
+      <ToastContainer
+        position="top-end"
+        className=" text-center font-monospace p-1 position-fixed rounded-5"
+        style={{ zIndex: 1055 }}
+      >
+        <Toast
+          onClose={() => setShowToast(false)}
+          show={showToast}
+          delay={3000}
+          autohide
+          bg="dark"
+          className="text-white tech-toast p-2 shadow-lg border-secondary"
+        >
+          <Toast.Body className="py-3 fw-semibold">{toastMessage}</Toast.Body>
+        </Toast>
+      </ToastContainer>
+
       <div className="bg-dark text-white py-3 mb-5 shadow-sm border-bottom border-secondary text-center">
         <Container className="py-4">
           <h1 className="display-4 fw-bold mb-3">
@@ -154,14 +178,12 @@ function Home() {
                           : "0.00"}
                       </span>
                     </div>
-
-                    {/* Disponibitlià */}
                     <div className="mb-2 small">
                       {product.stockQuantity > 0 ? (
                         <small
                           className={`fw-semibold ${product.stockQuantity <= 5 ? "text-danger" : "text-muted"}`}
                         >
-                          📦 Disponibili: {product.stockQuantity} pezzi
+                          Disponibilità: {product.stockQuantity} pezzi
                         </small>
                       ) : (
                         <small className="text-danger fw-semibold">

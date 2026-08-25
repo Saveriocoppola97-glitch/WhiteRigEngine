@@ -1,5 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect, useMemo } from "react";
 
 const CartContext = createContext();
 
@@ -19,17 +19,19 @@ export function CartProvider({ children }) {
         (item) => item.id === product.id,
       );
       if (existingIndex > -1) {
-        const updated = [...prevItems];
-        const currentItem = updated[existingIndex];
-        if (currentItem.quantity + 1 > product.stockQuantity) {
+        const currentItem = prevItems[existingIndex];
+        const newQuantity = currentItem.quantity + 1;
+
+        if (newQuantity > product.stockQuantity) {
           alert(
             `Disponibilità massima raggiunta per ${product.name} (${product.stockQuantity} pezzi disponibili).`,
           );
           return prevItems;
         }
 
-        currentItem.quantity += 1;
-        return updated;
+        return prevItems.map((item, index) =>
+          index === existingIndex ? { ...item, quantity: newQuantity } : item,
+        );
       } else {
         if (product.stockQuantity <= 0) {
           alert("Spiacenti, questo prodotto è esaurito.");
@@ -61,7 +63,7 @@ export function CartProvider({ children }) {
             );
             return { ...item, quantity: item.stockQuantity };
           }
-          return { ...item, quantity };
+          return { ...item, quantity: quantity };
         }
         return item;
       }),
@@ -72,15 +74,16 @@ export function CartProvider({ children }) {
     setCartItems([]);
   };
 
-  const totalAmount = cartItems.reduce(
-    (total, item) => total + item.price * item.quantity,
-    0,
-  );
+  const totalAmount = useMemo(() => {
+    return cartItems.reduce(
+      (total, item) => total + Number(item.price) * Number(item.quantity),
+      0,
+    );
+  }, [cartItems]);
 
-  const totalItemsCount = cartItems.reduce(
-    (total, item) => total + item.quantity,
-    0,
-  );
+  const totalItemsCount = useMemo(() => {
+    return cartItems.reduce((total, item) => total + item.quantity, 0);
+  }, [cartItems]);
 
   return (
     <CartContext.Provider
