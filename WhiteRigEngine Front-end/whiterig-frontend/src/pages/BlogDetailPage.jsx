@@ -260,7 +260,7 @@ function BlogDetailPage() {
           autohide
           bg={toastVariant === "success" ? "dark" : "danger"}
         >
-          <Toast.Body className="text-light fw-bold fs-">
+          <Toast.Body className="text-light fw-bold fs-4">
             {toastMessage}
           </Toast.Body>
         </Toast>
