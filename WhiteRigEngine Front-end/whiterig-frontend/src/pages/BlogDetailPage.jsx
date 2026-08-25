@@ -8,18 +8,22 @@ import {
   Form,
   Row,
   Col,
+  Toast,
+  ToastContainer,
 } from "react-bootstrap";
-import { useParams, Link } from "react-router-dom";
-import { getPostById, updatePost } from "../services/blogService";
+import { useParams, Link, useNavigate } from "react-router-dom";
+import { getPostById, updatePost, deletePost } from "../services/blogService";
 import { getToken, andrebbeBeneAdmin } from "../services/authService";
 
 function BlogDetailPage() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
-
+  const [toastMessage, setToastMessage] = useState(null);
+  const [toastVariant, setToastVariant] = useState("success");
   const [formData, setFormData] = useState({
     title: "",
     content: "",
@@ -37,7 +41,6 @@ function BlogDetailPage() {
         setLoading(true);
         const data = await getPostById(id);
         setPost(data);
-        // Inizializziamo il form con i dati esistenti
         setFormData({
           title: data.title || "",
           content: data.content || "",
@@ -71,12 +74,31 @@ function BlogDetailPage() {
     try {
       const token = getToken();
       const updated = await updatePost(id, formData, token);
-      setPost(updated); // Aggiorna i dati mostrati a schermo
+      setPost(updated);
       setShowEditModal(false);
     } catch {
       setFormError("Errore durante l'aggiornamento dell'articolo.");
     } finally {
       setSubmitting(false);
+    }
+  };
+
+  const handleDeletePost = async () => {
+    if (window.confirm("Sei sicuro di voler eliminare questo articolo?")) {
+      try {
+        const token = getToken();
+        await deletePost(id, token);
+        setToastVariant("success");
+        setToastMessage("Articolo eliminato con successo!");
+
+        setTimeout(() => {
+          navigate("/blog");
+        }, 2000);
+      } catch (err) {
+        setToastVariant("danger");
+        setToastMessage("Errore durante l'eliminazione dell'articolo.");
+        console.error(err);
+      }
     }
   };
 
@@ -88,7 +110,6 @@ function BlogDetailPage() {
       </Container>
     );
   }
-
   if (error) {
     return (
       <Container className="my-5">
@@ -107,12 +128,20 @@ function BlogDetailPage() {
           ← Torna agli articoli
         </Button>
         {isAdmin && (
-          <Button
-            className="pills-custom-overlay"
-            onClick={() => setShowEditModal(true)}
-          >
-            ✏️ Modifica Articolo
-          </Button>
+          <div className="d-flex gap-2">
+            <Button
+              className="pills-custom-overlay"
+              onClick={() => setShowEditModal(true)}
+            >
+              ✏️ Modifica Articolo
+            </Button>
+            <Button
+              className="fw-bold pills-custom-overlay"
+              onClick={handleDeletePost}
+            >
+              🗑️ Elimina Articolo
+            </Button>
+          </div>
         )}
       </div>
 
@@ -223,6 +252,19 @@ function BlogDetailPage() {
           </Modal.Footer>
         </Form>
       </Modal>
+      <ToastContainer position="bottom-end" className="p-2 position-fixed">
+        <Toast
+          show={toastMessage !== null}
+          onClose={() => setToastMessage(null)}
+          delay={4000}
+          autohide
+          bg={toastVariant === "success" ? "dark" : "danger"}
+        >
+          <Toast.Body className="text-light fw-bold fs-">
+            {toastMessage}
+          </Toast.Body>
+        </Toast>
+      </ToastContainer>
     </Container>
   );
 }

@@ -42,6 +42,21 @@ export const createPost = async (postData, token) => {
   return await response.json();
 };
 
+export const deletePost = async (id, token) => {
+  const response = await fetch(`${API_URL}/${id}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Errore durante l'eliminazione dell'articolo.");
+  }
+
+  return true;
+};
+
 export const updatePost = async (id, postData, token) => {
   const response = await fetch(`http://localhost:8080/api/blog/${id}`, {
     method: "PUT",

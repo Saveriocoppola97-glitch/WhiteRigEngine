@@ -39,4 +39,10 @@ public class BlogPostController {
     public ResponseEntity<BlogPost> updatePost(@PathVariable Long id, @RequestBody BlogPost post) {
         return ResponseEntity.ok(blogPostService.updatePost(id, post));
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletePost(@PathVariable Long id) {
+        blogPostService.deletePost(id);
+        return ResponseEntity.noContent().build();
+    }
 }
