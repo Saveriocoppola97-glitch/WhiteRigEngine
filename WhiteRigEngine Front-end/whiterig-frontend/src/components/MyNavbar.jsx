@@ -7,6 +7,7 @@ import {
 } from "../services/authService";
 import { useState, useEffect } from "react";
 import { useCart } from "../context/CartContext";
+import logo from "../assets/Logo.png";
 
 function MyNavbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(!!getToken());
@@ -33,10 +34,28 @@ function MyNavbar() {
   };
 
   return (
-    <Navbar bg="dark" variant="dark" expand="lg" className="shadow-sm">
+    <Navbar
+      style={{ backgroundColor: "#1d2125" }}
+      variant="dark"
+      expand="lg"
+      className="shadow-sm"
+    >
       <Container>
-        <Navbar.Brand as={Link} to="/">
-          WhiteRigEngine 🖥️
+        <Navbar.Brand as={Link} to="/" className="d-flex align-items-center">
+          <img
+            src={logo}
+            alt="WhiteRigEngine Logo"
+            style={{
+              height: "72px",
+              width: "auto",
+              objectFit: "contain",
+              borderRadius: "8px",
+              border: "3px solid #1d2125",
+              mixBlendMode: "screen", // Fa sparire la parte scura del JPEG integrandola con il #1d2125
+              filter: "contrast(3.5)",
+            }}
+            className="me-2"
+          />
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
