@@ -89,6 +89,8 @@ function Home() {
             Il tuo e-commerce e configuratore di PC custom di fiducia.
           </p>
           <Button
+            as={Link}
+            to="/build"
             variant="secondary"
             size="lg"
             className="fw-bold text-dark px-4 shadow-lg btn-custom-overlay"

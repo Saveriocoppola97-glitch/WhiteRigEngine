@@ -11,6 +11,7 @@ import ManageComponents from "./pages/ManageComponents";
 import CartPage from "./pages/CartPage";
 import MePage from "./pages/MePage";
 import UserOrdersPage from "./pages/UserOrdersPage";
+import BuildPage from "./pages/BuildPage";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
             <Route path="/cart" element={<CartPage />} />
             <Route path="/me" element={<MePage />} />
             <Route path="/my-orders" element={<UserOrdersPage />} />
+            <Route path="/build" element={<BuildPage />} />
           </Routes>
         </div>
       </Router>
