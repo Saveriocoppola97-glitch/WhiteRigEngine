@@ -115,6 +115,9 @@ function MyNavbar() {
                 <NavDropdown.Item as={Link} to="/my-orders">
                   📦 I miei ordini
                 </NavDropdown.Item>
+                <NavDropdown.Item as={Link} to="/my-builds">
+                  🖥️ Le mie build
+                </NavDropdown.Item>
                 <NavDropdown.Divider />
                 <NavDropdown.Item
                   onClick={handleLogout}

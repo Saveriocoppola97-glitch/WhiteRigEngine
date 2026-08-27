@@ -48,14 +48,14 @@ export const saveCustomBuild = async (buildData) => {
   return await response.json();
 };
 
-// Recupera le build di un determinato utente
-export const getBuildsByUser = async (userId) => {
-  const response = await fetch(`${API_URL}/user/${userId}`, {
+// Recupera le build dell'utente autenticato (tramite Token JWT)
+export const getMyBuilds = async () => {
+  const response = await fetch(`${API_URL}/my-builds`, {
     method: "GET",
     headers: getAuthHeaders(),
   });
   if (!response.ok) {
-    throw new Error("Errore nel recupero delle build utente");
+    throw new Error("Errore nel recupero delle tue configurazioni");
   }
   return await response.json();
 };

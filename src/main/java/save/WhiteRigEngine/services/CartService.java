@@ -8,6 +8,7 @@ import save.WhiteRigEngine.entities.ComponentProduct;
 import save.WhiteRigEngine.repositories.CartRepository;
 import save.WhiteRigEngine.repositories.ComponentRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -19,7 +20,6 @@ public class CartService {
     @Autowired
     private ComponentRepository componentRepository;
 
-    // Recupera o crea un carrello per l'utente in base alla sua email
     public Cart getOrCreateCart(String userEmail) {
         return cartRepository.findByUserEmail(userEmail)
                 .orElseGet(() -> {
@@ -29,14 +29,14 @@ public class CartService {
                 });
     }
 
-    // Aggiunge componente al carrello
+    // Aggiungo componente al carrello
     public Cart addComponentToCart(String userEmail, Long componentId, int quantity) {
         Cart cart = getOrCreateCart(userEmail);
 
         ComponentProduct component = componentRepository.findById(componentId)
                 .orElseThrow(() -> new RuntimeException("Component not found with id: " + componentId));
 
-        // Verifica se componente già presente in carrello
+        // Verifico se componente già presente in carrello
         Optional<CartItem> existingItemOpt = cart.getItems().stream()
                 .filter(item -> item.getComponent().getId().equals(componentId))
                 .findFirst();
@@ -50,6 +50,34 @@ public class CartService {
             newItem.setQuantity(quantity);
             newItem.setCart(cart);
             cart.getItems().add(newItem);
+        }
+
+        calculateAndSetTotalPrice(cart);
+        return cartRepository.save(cart);
+    }
+
+    // Aggiungo un'intera lista di componenti al carrello
+    public Cart addBuildToCart(String userEmail, List<Long> componentIds) {
+        Cart cart = getOrCreateCart(userEmail);
+
+        for (Long componentId : componentIds) {
+            ComponentProduct component = componentRepository.findById(componentId)
+                    .orElseThrow(() -> new RuntimeException("Component not found with id: " + componentId));
+
+            Optional<CartItem> existingItemOpt = cart.getItems().stream()
+                    .filter(item -> item.getComponent().getId().equals(componentId))
+                    .findFirst();
+
+            if (existingItemOpt.isPresent()) {
+                CartItem existingItem = existingItemOpt.get();
+                existingItem.setQuantity(existingItem.getQuantity() + 1);
+            } else {
+                CartItem newItem = new CartItem();
+                newItem.setComponent(component);
+                newItem.setQuantity(1);
+                newItem.setCart(cart);
+                cart.getItems().add(newItem);
+            }
         }
 
         calculateAndSetTotalPrice(cart);

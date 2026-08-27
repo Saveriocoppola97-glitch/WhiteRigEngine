@@ -98,6 +98,36 @@ export function CartProvider({ children }) {
     return warningMessage;
   };
 
+  const addBulkToCart = (componentsList) => {
+    setCartItems((prevItems) => {
+      let updatedItems = [...prevItems];
+
+      componentsList.forEach((comp) => {
+        const compId = getItemId(comp);
+        if (!compId) return;
+
+        const existingIndex = updatedItems.findIndex(
+          (item) => getItemId(item) === compId,
+        );
+
+        if (existingIndex > -1) {
+          updatedItems[existingIndex] = {
+            ...updatedItems[existingIndex],
+            quantity: updatedItems[existingIndex].quantity + 1,
+          };
+        } else {
+          updatedItems.push({
+            ...comp,
+            id: compId,
+            quantity: 1,
+          });
+        }
+      });
+
+      return updatedItems;
+    });
+  };
+
   const clearCart = () => {
     setCartItems([]);
   };
@@ -118,6 +148,7 @@ export function CartProvider({ children }) {
       value={{
         cartItems,
         addToCart,
+        addBulkToCart,
         removeFromCart,
         updateQuantity,
         clearCart,
