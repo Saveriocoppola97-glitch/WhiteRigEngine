@@ -69,6 +69,9 @@ function MyNavbar() {
             <Nav.Link as={Link} to="/blog">
               Blog & Guide
             </Nav.Link>
+            <Nav.Link as={Link} to="/build">
+              Builder
+            </Nav.Link>
             <Nav.Link
               as={Link}
               to="/cart"

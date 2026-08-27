@@ -35,8 +35,8 @@ export default function BuildPage() {
   const [availableComponents, setAvailableComponents] = useState([]);
 
   const slots = [
-    { key: "cpu", label: "CPU (Processore)", category: "CPU" },
     { key: "motherboard", label: "Scheda Madre", category: "MOTHERBOARD" },
+    { key: "cpu", label: "CPU (Processore)", category: "CPU" },
     { key: "ram", label: "Memoria RAM", category: "RAM" },
     { key: "gpu", label: "Scheda Video (GPU)", category: "GPU" },
     { key: "storage", label: "Archiviazione (SSD/HDD)", category: "STORAGE" },
@@ -152,9 +152,7 @@ export default function BuildPage() {
   return (
     <>
       <Container className="py-5">
-        <h2 className="fw-bold text-dark mb-4">
-          🛠️ Simulatore di Build Professionale
-        </h2>
+        <h2 className="fw-bold text-dark mb-4">CUSTOM BUILD</h2>
 
         {successMessage && <Alert variant="success">{successMessage}</Alert>}
         {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
@@ -201,7 +199,7 @@ export default function BuildPage() {
                           )}
                           <div>
                             <h6 className="mb-0 fw-bold">{part.name}</h6>
-                            <small className="text-success fw-bold">
+                            <small className="text-light fw-bold">
                               € {Number(part.price).toFixed(2)}
                             </small>
                           </div>
@@ -216,9 +214,10 @@ export default function BuildPage() {
                       {part ? (
                         <>
                           <Button
-                            variant="outline-warning"
-                            size="sm"
-                            className="me-2"
+                            variant="secondary"
+                            size="md"
+                            className="fw-bold text-dark px-4 shadow-lg pills-custom-overlay"
+                            style={{ backgroundColor: "#dbdada75" }}
                             onClick={() =>
                               handleOpenModal(slot.key, slot.category)
                             }
@@ -226,8 +225,10 @@ export default function BuildPage() {
                             Cambia
                           </Button>
                           <Button
-                            variant="outline-danger"
-                            size="sm"
+                            variant="secondary"
+                            size="md"
+                            className="fw-bold text-dark px-4 shadow-lg pills-custom-overlay"
+                            style={{ backgroundColor: "#dbdada75" }}
                             onClick={() => handleRemoveComponent(slot.key)}
                           >
                             Rimuovi
@@ -236,9 +237,12 @@ export default function BuildPage() {
                       ) : (
                         <Button
                           variant="secondary"
-                          size="lg"
-                          className="fw-bold text-dark px-4 shadow-lg btn-custom-overlay"
+                          size="md"
+                          className="fw-bold text-dark px-4 shadow-lg pills-custom-overlay"
                           style={{ backgroundColor: "#dbdada75" }}
+                          onClick={() =>
+                            handleOpenModal(slot.key, slot.category)
+                          }
                         >
                           Seleziona
                         </Button>
@@ -268,7 +272,7 @@ export default function BuildPage() {
 
                 {compatibilityResult && (
                   <div className="mb-3 p-2 bg-secondary bg-opacity-25 rounded">
-                    <small className="text-muted d-block">
+                    <small className="d-block">
                       Consumo Energetico Stimato:
                     </small>
                     <span className="fw-bold fs-5 text-warning">
@@ -285,14 +289,14 @@ export default function BuildPage() {
                       </Badge>
                     ) : (
                       <Badge bg="danger" className="p-2 w-100 fs-6">
-                        ❌ Problemi di Compatibilità
+                        ⚠️Problemi di Compatibilità⚠️
                       </Badge>
                     )}
 
                     {compatibilityResult.errors &&
                       compatibilityResult.errors.length > 0 && (
                         <div className="mt-3 text-danger small">
-                          <strong>Errori rilevati:</strong>
+                          <strong>Errore:</strong>
                           <ul>
                             {compatibilityResult.errors.map((err, idx) => (
                               <li key={idx}>{err}</li>
@@ -376,18 +380,20 @@ export default function BuildPage() {
                     )}
                     <div>
                       <h6 className="mb-0 fw-bold">{comp.name}</h6>
-                      <small className="text-muted">
+                      <small>
                         {comp.brand} • Disponibili: {comp.stockQuantity}
                       </small>
                     </div>
                   </div>
                   <div className="text-end">
-                    <span className="text-success fw-bold d-block mb-1">
+                    <span className="text-light fw-bold d-block mb-1">
                       € {Number(comp.price).toFixed(2)}
                     </span>
                     <Button
-                      variant="primary"
-                      size="sm"
+                      variant="secondary"
+                      size="md"
+                      className="fw-bold text-dark px-4 shadow-lg pills-custom-overlay"
+                      style={{ backgroundColor: "#dbdada75" }}
                       onClick={() => handleSelectComponent(comp)}
                     >
                       Seleziona

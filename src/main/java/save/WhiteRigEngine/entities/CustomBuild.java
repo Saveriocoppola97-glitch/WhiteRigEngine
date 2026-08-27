@@ -21,7 +21,6 @@ public class CustomBuild {
     @Column(nullable = false)
     private String buildName;
 
-    // Relazioni con le varie componenti hardware
     @ManyToOne
     @JoinColumn(name = "cpu_id")
     private ComponentProduct cpu;
