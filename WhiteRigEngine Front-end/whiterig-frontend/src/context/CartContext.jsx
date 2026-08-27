@@ -13,7 +13,6 @@ export function CartProvider({ children }) {
     localStorage.setItem("whiterig_cart", JSON.stringify(cartItems));
   }, [cartItems]);
 
-  // Helper per ricavare l'ID univoco in modo coerente ovunque
   const getItemId = (item) => {
     if (!item) return null;
     return item.id !== undefined
@@ -51,7 +50,6 @@ export function CartProvider({ children }) {
             : item,
         );
       } else {
-        // Normalizziamo l'oggetto assicurandoci che abbia un .id di riferimento standard
         const normalizedProduct = {
           ...product,
           id: productId,

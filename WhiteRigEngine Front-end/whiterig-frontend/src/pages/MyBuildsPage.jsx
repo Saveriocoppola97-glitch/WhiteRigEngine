@@ -84,7 +84,7 @@ export default function MyBuildsPage() {
         `Configurazione "${build.buildName}" aggiunta al carrello con successo!`,
       );
 
-      setTimeout(() => navigate("/cart"), 1500);
+      setTimeout(() => navigate("/cart"), 1000);
     } catch (err) {
       console.error(err);
       setErrorMessage(

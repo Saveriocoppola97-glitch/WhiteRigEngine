@@ -44,9 +44,7 @@ function Home() {
       const data = await getAllComponents(category);
       setProducts(data);
     } catch {
-      setError(
-        "Impossibile caricare il catalogo. Verifica che il sitoweb sia attivo.",
-      );
+      setError("Impossibile caricare il catalogo.");
     } finally {
       setLoading(false);
     }
@@ -103,17 +101,24 @@ function Home() {
       </div>
 
       <Container className="mb-5">
-        <div className="d-flex justify-content-center mb-5 overflow-auto py-2 ">
-          <Nav variant="pills" className="gap-2 flex-nowrap ">
+        <div className="d-flex justify-content-center mb-3 overflow-auto py-2">
+          <Nav
+            variant="pills"
+            className="gap-2 flex-nowrap align-items-stretch"
+          >
             {categories.map((cat) => (
-              <Nav.Item key={cat.key}>
+              <Nav.Item key={cat.key} className="d-flex">
                 <Nav.Link
                   active={selectedCategory === cat.key}
                   onClick={() => {
                     setLoading(true);
                     setSelectedCategory(cat.key);
                   }}
-                  className={` pills-custom-overlay px-4 fw-semibold ${selectedCategory === cat.key ? "bg-dark text-white shadow-sm" : "text-dark"}`}
+                  className={`pills-custom-overlay px-4 py-3 fw-semibold d-flex align-items-center justify-content-center text-center flex-fill ${
+                    selectedCategory === cat.key
+                      ? "bg-dark text-white shadow-sm"
+                      : "text-dark"
+                  }`}
                   style={{ cursor: "pointer", backgroundColor: "#dbdada75" }}
                 >
                   {cat.label}
@@ -143,7 +148,7 @@ function Home() {
         <Row>
           {products.map((product) => (
             <Col md={4} lg={3} className="mb-4" key={product.id}>
-              <Card className="h-100 shadow-sm border-0 position-relative">
+              <Card className="h-100 shadow-sm border-0 position-relative overflow-hidden">
                 {product.stockQuantity <= 0 && (
                   <Badge
                     bg="danger"
@@ -160,9 +165,9 @@ function Home() {
                   }
                   alt={product.name}
                   style={{
-                    height: "200px",
-                    objectFit: "contain",
-                    padding: "15px",
+                    height: "16em",
+                    objectFit: "cover",
+                    width: "100%",
                   }}
                 />
                 <Card.Body className="d-flex flex-column">

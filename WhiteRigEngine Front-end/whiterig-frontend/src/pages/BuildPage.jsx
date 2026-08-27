@@ -104,17 +104,17 @@ export default function BuildPage() {
     };
   };
 
+  const hasParts = Object.values(selectedParts).some((p) => p !== null);
+
   useEffect(() => {
-    const hasParts = Object.values(selectedParts).some((p) => p !== null);
     if (!hasParts) {
-      setCompatibilityResult(null);
       return;
     }
-
     checkBuildCompatibility(getBuildPayload())
       .then(setCompatibilityResult)
       .catch((err) => console.error(err));
-  }, [selectedParts, buildName]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasParts, buildName]);
 
   const handleSaveBuild = async () => {
     setSuccessMessage(null);
