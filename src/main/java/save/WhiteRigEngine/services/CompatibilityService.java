@@ -64,7 +64,7 @@ public class CompatibilityService {
 
         if (psu != null && psu.getWattage() != null) {
             if (psu.getWattage() < estimatedWattage) {
-                result.addError("Alimentatore Insufficiente: Il sistema stimato richiede almeno "
+                result.addError("Alimentatore Insufficiente: Il sistema richiede almeno "
                         + estimatedWattage + "W, ma la PSU scelta eroga " + psu.getWattage() + "W.");
             } else if (psu.getWattage() < estimatedWattage + 50) {
                 result.addWarning("Alimentatore al limite: Si consiglia una PSU con un margine superiore di Watt.");

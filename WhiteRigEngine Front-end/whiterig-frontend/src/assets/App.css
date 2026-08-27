@@ -91,3 +91,21 @@ h3 {
   border-color: #d4d5d6 !important;
   background: linear-gradient(135deg, #21252983 0%, #f0f2f4 100%) !important;
 }
+
+.pills-custom-build {
+  background: linear-gradient(135deg, #e6e7e9 0%, #eef0f1 100%) !important;
+  color: #070000 !important;
+  box-shadow:
+    0 5px 10px rgba(255, 252, 252, 0.5),
+    0 3px 7px rgba(228, 226, 226, 0.3) !important;
+  transition: all 0.35s ease-in-out !important;
+}
+
+.pills-custom-build:hover {
+  transform: translateY(-5px);
+  box-shadow:
+    0 10px 20px rgba(212, 213, 214, 0.25),
+    0 5px 10px rgba(214, 213, 213, 0.4) !important;
+  border-color: #d4d5d6 !important;
+  background: linear-gradient(135deg, #58636d83 0%, #f0f2f4 100%) !important;
+}

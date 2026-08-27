@@ -1,7 +1,16 @@
 const API_URL = "http://localhost:8080/api/builds";
 
-// Funzione di supporto per ottenere il token JWT
+// Funzione di supporto unificata per il recupero del token JWT
 const getAuthHeaders = () => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    return {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    };
+  }
+
+  // Fallback se il token è salvato dentro l'oggetto user
   const user = JSON.parse(localStorage.getItem("user"));
   if (user && user.token) {
     return {
@@ -9,6 +18,7 @@ const getAuthHeaders = () => {
       Authorization: `Bearer ${user.token}`,
     };
   }
+
   return { "Content-Type": "application/json" };
 };
 

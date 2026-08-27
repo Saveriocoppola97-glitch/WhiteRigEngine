@@ -26,6 +26,7 @@ export default function BuildPage() {
     case: null,
   });
 
+  const [currentCategory, setCurrentCategory] = useState(null);
   const [buildName, setBuildName] = useState("");
   const [compatibilityResult, setCompatibilityResult] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
@@ -45,13 +46,20 @@ export default function BuildPage() {
   ];
 
   const handleOpenModal = async (slotKey, categoryName) => {
-    setSelectedParts((prev) => ({ ...prev, _currentCategory: slotKey }));
+    setCurrentCategory(slotKey);
     try {
       const response = await fetch(
         `http://localhost:8080/api/components?category=${categoryName}`,
       );
       if (!response.ok) throw new Error("Errore caricamento componenti");
-      const data = await response.json();
+      let data = await response.json();
+
+      if (categoryName === "CPU" && selectedParts.motherboard?.socket) {
+        data = data.filter(
+          (comp) => comp.socket === selectedParts.motherboard.socket,
+        );
+      }
+
       setAvailableComponents(data);
       setShowModal(true);
     } catch (err) {
@@ -60,13 +68,11 @@ export default function BuildPage() {
   };
 
   const handleSelectComponent = (component) => {
-    const activeSlot = slots.find(
-      (s) => s.category === component.category,
-    )?.key;
+    const activeSlot = currentCategory || selectedParts._currentCategory;
     if (activeSlot) {
       setSelectedParts((prev) => ({
         ...prev,
-        [activeSlot]: component,
+        [activeSlot]: { ...component },
       }));
     }
     setShowModal(false);
@@ -76,76 +82,95 @@ export default function BuildPage() {
     setSelectedParts((prev) => ({
       ...prev,
       [slotKey]: null,
+      ...(slotKey === "motherboard" ? { cpu: null } : {}),
     }));
   };
+  const totalPrice = slots.reduce((sum, slot) => {
+    const part = selectedParts[slot.key];
+    if (!part) return sum;
 
-  const totalPrice = Object.values(selectedParts).reduce((sum, part) => {
-    return (
-      sum +
-      (part && typeof part === "object" && part.price ? Number(part.price) : 0)
-    );
+    // Stampiamo in console cosa stiamo leggendo per ogni pezzo
+    console.log(`Leggo il pezzo ${slot.key}:`, part);
+
+    // Proviamo a estrarre il prezzo pulendo eventuali stringhe strane
+    let rawPrice = part.price !== undefined ? part.price : part.prezzo;
+
+    if (typeof rawPrice === "string") {
+      // Rimuove eventuali simboli di valuta o spazi e sostituisce la virgola col punto
+      rawPrice = rawPrice.replace(/[€$]/g, "").trim().replace(",", ".");
+    }
+
+    const priceNum = Number(rawPrice);
+    console.log(`Prezzo convertito per ${slot.key}:`, priceNum);
+
+    return sum + (isNaN(priceNum) ? 0 : priceNum);
   }, 0);
 
+  const userStr = localStorage.getItem("user");
+  const userId = userStr ? JSON.parse(userStr).id : null;
+
+  const currentBuildData = {
+    buildName: buildName.trim() || "Mia Custom Build",
+    cpuId: selectedParts.cpu?.id || null,
+    gpuId: selectedParts.gpu?.id || null,
+    ramId: selectedParts.ram?.id || null,
+    motherboardId: selectedParts.motherboard?.id || null,
+    storageId: selectedParts.storage?.id || null,
+    psuId: selectedParts.psu?.id || null,
+    caseId: selectedParts.case?.id || null,
+    userId: userId || null,
+  };
+
+  const buildDataString = JSON.stringify(currentBuildData);
+
   useEffect(() => {
-    const fetchCompatibility = async () => {
-      const buildRequest = {
-        buildName: buildName || "Mia Custom Build",
-        cpuId: selectedParts.cpu?.id || null,
-        gpuId: selectedParts.gpu?.id || null,
-        ramId: selectedParts.ram?.id || null,
-        motherboardId: selectedParts.motherboard?.id || null,
-        storageId: selectedParts.storage?.id || null,
-        psuId: selectedParts.psu?.id || null,
-        caseId: selectedParts.case?.id || null,
-        userId: JSON.parse(localStorage.getItem("user"))?.id || null,
-      };
+    const payload = JSON.parse(buildDataString);
 
-      const hasAnyPart = Object.entries(selectedParts).some(
-        ([key, p]) => key !== "_currentCategory" && p !== null,
-      );
-      if (!hasAnyPart) {
-        setCompatibilityResult(null);
-        return;
-      }
+    const hasAnyComponent = [
+      payload.cpuId,
+      payload.gpuId,
+      payload.ramId,
+      payload.motherboardId,
+      payload.storageId,
+      payload.psuId,
+      payload.caseId,
+    ].some((id) => id !== null);
 
+    if (!hasAnyComponent) {
+      setCompatibilityResult(null);
+      return;
+    }
+
+    const fetchComp = async () => {
       try {
-        const result = await checkBuildCompatibility(buildRequest);
+        const result = await checkBuildCompatibility(payload);
         setCompatibilityResult(result);
       } catch (err) {
         console.error("Errore nel controllo compatibilità", err);
       }
     };
 
-    fetchCompatibility();
-  }, [selectedParts, buildName]);
+    fetchComp();
+  }, [buildDataString]);
 
   const handleSaveBuild = async () => {
     setSuccessMessage(null);
     setErrorMessage(null);
 
-    const currentUser = JSON.parse(localStorage.getItem("user"));
-    if (!currentUser) {
+    const token =
+      localStorage.getItem("token") ||
+      JSON.parse(localStorage.getItem("user"))?.token;
+    if (!token) {
       setErrorMessage("Devi effettuare il login per salvare una build!");
       return;
     }
 
-    const buildRequest = {
-      buildName: buildName.trim() || "Configurazione Senza Nome",
-      cpuId: selectedParts.cpu?.id || null,
-      gpuId: selectedParts.gpu?.id || null,
-      ramId: selectedParts.ram?.id || null,
-      motherboardId: selectedParts.motherboard?.id || null,
-      storageId: selectedParts.storage?.id || null,
-      psuId: selectedParts.psu?.id || null,
-      caseId: selectedParts.case?.id || null,
-      userId: currentUser.id,
-    };
-
     try {
-      await saveCustomBuild(buildRequest);
-      setSuccessMessage("Build salvata con successo nel tuo profilo! 🎉");
-    } catch {
-      setErrorMessage("Errore durante il salvataggio della build. Riprova.");
+      await saveCustomBuild(currentBuildData);
+      setSuccessMessage("Build salvata con successo!");
+    } catch (err) {
+      console.error(err);
+      setErrorMessage("Impossibile salvare la build. Riprova.");
     }
   };
 
@@ -173,10 +198,16 @@ export default function BuildPage() {
 
             {slots.map((slot) => {
               const part = selectedParts[slot.key];
+              const isMotherboardSelected = !!selectedParts.motherboard;
+              const isLocked =
+                slot.key !== "motherboard" && !isMotherboardSelected;
+
               return (
                 <Card
                   key={slot.key}
-                  className="bg-secondary text-light mb-3 border-secondary shadow-sm"
+                  className={`bg-secondary text-light mb-3 border-secondary shadow-sm ${
+                    isLocked ? "opacity-50" : ""
+                  }`}
                 >
                   <Card.Body className="d-flex justify-content-between align-items-center">
                     <div>
@@ -205,8 +236,10 @@ export default function BuildPage() {
                           </div>
                         </div>
                       ) : (
-                        <span className="text-italic text-dark">
-                          Nessun componente selezionato
+                        <span className="fst-italic text-dark">
+                          {isLocked
+                            ? "🔒 Seleziona prima la Scheda Madre"
+                            : "Nessun componente selezionato"}
                         </span>
                       )}
                     </div>
@@ -216,7 +249,7 @@ export default function BuildPage() {
                           <Button
                             variant="secondary"
                             size="md"
-                            className="fw-bold text-dark px-4 shadow-lg pills-custom-overlay"
+                            className="fw-bold text-dark px-4 shadow-sm me-2"
                             style={{ backgroundColor: "#dbdada75" }}
                             onClick={() =>
                               handleOpenModal(slot.key, slot.category)
@@ -227,7 +260,7 @@ export default function BuildPage() {
                           <Button
                             variant="secondary"
                             size="md"
-                            className="fw-bold text-dark px-4 shadow-lg pills-custom-overlay"
+                            className="fw-bold text-dark px-4 shadow-sm"
                             style={{ backgroundColor: "#dbdada75" }}
                             onClick={() => handleRemoveComponent(slot.key)}
                           >
@@ -238,13 +271,21 @@ export default function BuildPage() {
                         <Button
                           variant="secondary"
                           size="md"
-                          className="fw-bold text-dark px-4 shadow-lg pills-custom-overlay"
-                          style={{ backgroundColor: "#dbdada75" }}
+                          className={`fw-bold text-dark px-4 shadow-sm ${
+                            isLocked ? "disabled" : ""
+                          }`}
+                          style={{
+                            backgroundColor: isLocked
+                              ? "#88888875"
+                              : "#dbdada75",
+                            pointerEvents: isLocked ? "none" : "auto",
+                          }}
+                          disabled={isLocked}
                           onClick={() =>
                             handleOpenModal(slot.key, slot.category)
                           }
                         >
-                          Seleziona
+                          {isLocked ? "Bloccato" : "Seleziona"}
                         </Button>
                       )}
                     </div>
@@ -289,7 +330,7 @@ export default function BuildPage() {
                       </Badge>
                     ) : (
                       <Badge bg="danger" className="p-2 w-100 fs-6">
-                        ⚠️Problemi di Compatibilità⚠️
+                        ⚠️ Problemi di Compatibilità ⚠️
                       </Badge>
                     )}
 
@@ -392,7 +433,7 @@ export default function BuildPage() {
                     <Button
                       variant="secondary"
                       size="md"
-                      className="fw-bold text-dark px-4 shadow-lg pills-custom-overlay"
+                      className="fw-bold text-dark px-4 shadow-sm"
                       style={{ backgroundColor: "#dbdada75" }}
                       onClick={() => handleSelectComponent(comp)}
                     >
