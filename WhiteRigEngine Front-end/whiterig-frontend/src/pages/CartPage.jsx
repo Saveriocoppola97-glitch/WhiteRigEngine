@@ -227,7 +227,7 @@ export default function CartPage() {
                       {cartItems.map((item) => (
                         <tr key={item.id}>
                           <td>
-                            <div className="d-flex align-items-center justify-content-center">
+                            <div className="d-flex align-items-center justify-content-start">
                               <img
                                 src={
                                   item.imageUrl ||
