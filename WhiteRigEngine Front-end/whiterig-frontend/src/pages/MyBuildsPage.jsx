@@ -50,6 +50,7 @@ export default function MyBuildsPage() {
       build.ram,
       build.gpu,
       build.storage,
+      build.cooling,
       build.psu,
       build.case,
     ].filter(Boolean);
@@ -64,7 +65,6 @@ export default function MyBuildsPage() {
       .filter((id) => id != null);
 
     try {
-      // 1. Chiamata al backend per salvare sul database dell'utente
       const response = await fetch("http://localhost:8080/api/cart/add-build", {
         method: "POST",
         headers: {
@@ -78,7 +78,6 @@ export default function MyBuildsPage() {
         throw new Error("Errore durante l'aggiunta al carrello sul server");
       }
 
-      // 2. Aggiorniamo anche il Context locale di React così la UI si aggiorna all'istante!
       addBulkToCart(componentsList);
 
       setSuccessMessage(
@@ -114,6 +113,7 @@ export default function MyBuildsPage() {
               build.ram,
               build.gpu,
               build.storage,
+              build.cooling,
               build.psu,
               build.case,
             ].filter(Boolean);

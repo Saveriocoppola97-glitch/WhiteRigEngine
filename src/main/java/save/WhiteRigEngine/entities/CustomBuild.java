@@ -42,6 +42,10 @@ public class CustomBuild {
     private ComponentProduct storage;
 
     @ManyToOne
+    @JoinColumn(name = "cooling_id")
+    private ComponentProduct cooling;
+
+    @ManyToOne
     @JoinColumn(name = "psu_id")
     private ComponentProduct psu;
 

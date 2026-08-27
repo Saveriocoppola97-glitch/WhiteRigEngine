@@ -24,6 +24,7 @@ export default function BuildPage() {
     storage: null,
     psu: null,
     case: null,
+    cooling: null,
   });
 
   const [currentCategory, setCurrentCategory] = useState(null);
@@ -40,6 +41,7 @@ export default function BuildPage() {
     { key: "ram", label: "Memoria RAM", category: "RAM" },
     { key: "gpu", label: "Scheda Video (GPU)", category: "GPU" },
     { key: "storage", label: "Archiviazione (SSD/HDD)", category: "STORAGE" },
+    { key: "cooling", label: "Dissipatore (Cooling)", category: "COOLING" },
     { key: "psu", label: "Alimentatore (PSU)", category: "PSU" },
     { key: "case", label: "Case PC", category: "CASE" },
   ];
@@ -95,6 +97,7 @@ export default function BuildPage() {
       ramId: selectedParts.ram?.id || null,
       motherboardId: selectedParts.motherboard?.id || null,
       storageId: selectedParts.storage?.id || null,
+      coolingId: selectedParts.cooling?.id || null,
       psuId: selectedParts.psu?.id || null,
       caseId: selectedParts.case?.id || null,
       userId: user?.id || null,

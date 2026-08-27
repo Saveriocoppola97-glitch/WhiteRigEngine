@@ -11,6 +11,7 @@ public class BuildRequestDTO {
     private Long motherboardId;
     private Long storageId;
     private Long psuId;
+    private Long coolingId;
     private Long caseId;
     private Long userId;
 }

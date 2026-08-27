@@ -33,7 +33,8 @@ function Home() {
     { key: "MOTHERBOARD", label: "Schede Madri" },
     { key: "RAM", label: "Memorie RAM" },
     { key: "STORAGE", label: "SSD & Hard Disk" },
-    { key: "CASE", label: "Case & Dissipatori" },
+    { key: "CASE", label: "Case PC" },
+    { key: "COOLING", label: "Dissipatori" },
     { key: "PSU", label: "Alimentatori (PSU)" },
   ];
 
@@ -146,7 +147,7 @@ function Home() {
                 {product.stockQuantity <= 0 && (
                   <Badge
                     bg="danger"
-                    className="position-absolute top-0 end-0 m-2"
+                    className="position-absolute top-0 end-0 m-2 fs-6"
                   >
                     Esaurito
                   </Badge>

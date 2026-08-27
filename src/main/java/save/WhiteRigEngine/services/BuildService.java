@@ -49,6 +49,7 @@ public class BuildService {
         build.setRam(fetchComponent(dto.getRamId()));
         build.setMotherboard(fetchComponent(dto.getMotherboardId()));
         build.setStorage(fetchComponent(dto.getStorageId()));
+        build.setCooling(fetchComponent(dto.getCoolingId()));
         build.setPsu(fetchComponent(dto.getPsuId()));
         build.setPcCase(fetchComponent(dto.getCaseId()));
 
@@ -58,6 +59,7 @@ public class BuildService {
                         build.getRam(),
                         build.getMotherboard(),
                         build.getStorage(),
+                        build.getCooling(),
                         build.getPsu(),
                         build.getPcCase()
                 )
