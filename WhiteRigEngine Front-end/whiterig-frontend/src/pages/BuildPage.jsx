@@ -68,12 +68,22 @@ export default function BuildPage() {
   };
 
   const handleSelectComponent = (component) => {
-    const activeSlot = currentCategory || selectedParts._currentCategory;
+    const activeSlot = currentCategory;
+    console.log(
+      "Sto salvando nel bucket:",
+      activeSlot,
+      "il componente:",
+      component,
+    );
     if (activeSlot) {
-      setSelectedParts((prev) => ({
-        ...prev,
-        [activeSlot]: { ...component },
-      }));
+      setSelectedParts((prev) => {
+        const newState = {
+          ...prev,
+          [activeSlot]: { ...component },
+        };
+        console.log("Nuovo stato selectedParts:", newState);
+        return newState;
+      });
     }
     setShowModal(false);
   };
@@ -85,26 +95,27 @@ export default function BuildPage() {
       ...(slotKey === "motherboard" ? { cpu: null } : {}),
     }));
   };
+
+  // Calcolo del prezzo totale corretto e reattivo
   const totalPrice = slots.reduce((sum, slot) => {
     const part = selectedParts[slot.key];
     if (!part) return sum;
 
-    // Stampiamo in console cosa stiamo leggendo per ogni pezzo
-    console.log(`Leggo il pezzo ${slot.key}:`, part);
-
-    // Proviamo a estrarre il prezzo pulendo eventuali stringhe strane
-    let rawPrice = part.price !== undefined ? part.price : part.prezzo;
+    const rawPrice = part.price !== undefined ? part.price : part.prezzo;
+    let numericPrice = 0;
 
     if (typeof rawPrice === "string") {
-      // Rimuove eventuali simboli di valuta o spazi e sostituisce la virgola col punto
-      rawPrice = rawPrice.replace(/[€$]/g, "").trim().replace(",", ".");
+      numericPrice = Number(
+        rawPrice.replace(/[€$]/g, "").trim().replace(",", "."),
+      );
+    } else if (typeof rawPrice === "number") {
+      numericPrice = rawPrice;
     }
 
-    const priceNum = Number(rawPrice);
-    console.log(`Prezzo convertito per ${slot.key}:`, priceNum);
-
-    return sum + (isNaN(priceNum) ? 0 : priceNum);
+    return sum + (isNaN(numericPrice) ? 0 : numericPrice);
   }, 0);
+
+  console.log("VALORE FINALE DI totalPrice DURANTE IL RENDER:", totalPrice);
 
   const userStr = localStorage.getItem("user");
   const userId = userStr ? JSON.parse(userStr).id : null;
@@ -307,7 +318,7 @@ export default function BuildPage() {
                 <div className="d-flex justify-content-between align-items-center mb-3">
                   <span className="fs-5">Totale Stimato:</span>
                   <span className="fs-4 fw-bold text-success">
-                    € {totalPrice.toFixed(2)}
+                    € {Number(totalPrice).toFixed(2)}
                   </span>
                 </div>
 
