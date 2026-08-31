@@ -28,18 +28,20 @@ public class ComponentController {
 
     // GET che restituisce tutti i componenti o li filtra per categoria
     @GetMapping
-    public ResponseEntity<List<ComponentProduct>> getAllComponents(
+    public ResponseEntity<org.springframework.data.domain.Page<ComponentProduct>> getAllComponents(
             @RequestParam(required = false) Category category,
-            @RequestParam(required = false) String search) {
+            @RequestParam(required = false) String search,
+            @org.springframework.data.web.PageableDefault(page = 0, size = 20, sort = "id")
+            org.springframework.data.domain.Pageable pageable) {
 
         if (category != null) {
-            return ResponseEntity.ok(componentService.getComponentsByCategory(category));
+            return ResponseEntity.ok(componentService.getComponentsByCategory(category, pageable));
         }
         if (search != null && !search.trim().isEmpty()) {
-            return ResponseEntity.ok(componentService.searchComponentsByName(search));
+            return ResponseEntity.ok(componentService.searchComponentsByName(search, pageable));
         }
 
-        return ResponseEntity.ok(componentService.getAllComponents());
+        return ResponseEntity.ok(componentService.getAllComponents(pageable));
     }
 
     // GET che restituisce i dettagli di un singolo componente

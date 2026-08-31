@@ -11,14 +11,17 @@ import {
   Toast,
   ToastContainer,
 } from "react-bootstrap";
-import { getAllComponents } from "../services/componentService";
+import { getComponents } from "../services/componentService";
 import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
+import PaginationBar from "../components/PaginationBar";
 import "../assets/App.css";
 
 function Home() {
   const [products, setProducts] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("ALL");
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
   const [error, setError] = useState(null);
   const { addToCart } = useCart();
   const [showToast, setShowToast] = useState(false);
@@ -36,19 +39,29 @@ function Home() {
     { key: "PSU", label: "Alimentatori (PSU)" },
   ];
 
-  const fetchProducts = async (category) => {
+  const fetchProducts = async (category, page) => {
     try {
       setError(null);
-      const data = await getAllComponents(category);
-      setProducts(data);
+      const catParam = category === "ALL" ? "" : category;
+      const data = await getComponents(page, 20, catParam);
+
+      setProducts(data.content);
+      setCurrentPage(data.number);
+      setTotalPages(data.totalPages);
     } catch {
       setError("Impossibile caricare il catalogo.");
     }
   };
 
   useEffect(() => {
-    fetchProducts(selectedCategory);
+    setCurrentPage(0);
+    fetchProducts(selectedCategory, 0);
   }, [selectedCategory]);
+
+  const handlePageChange = (newPage) => {
+    fetchProducts(selectedCategory, newPage);
+    window.scrollTo({ top: 400, behavior: "smooth" });
+  };
 
   const handleAddToCart = (product) => {
     addToCart(product);
@@ -129,7 +142,6 @@ function Home() {
           </Alert>
         )}
 
-        {/* Griglia dei prodotti con animazione sequenziale pulita */}
         <Row>
           {products.map((product, index) => (
             <Col
@@ -216,6 +228,11 @@ function Home() {
             </Col>
           ))}
         </Row>
+        <PaginationBar
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
       </Container>
     </div>
   );

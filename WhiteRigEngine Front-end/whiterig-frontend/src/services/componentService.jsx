@@ -1,23 +1,26 @@
 const API_URL = "http://localhost:8080/api/components";
 
-export const getAllComponents = async (category = null) => {
-  let url = API_URL;
-  if (category && category !== "ALL") {
-    url += `?category=${category}`;
+export const getComponents = async (
+  page = 0,
+  size = 20,
+  category = "",
+  search = "",
+) => {
+  let url = `http://localhost:8080/api/components?page=${page}&size=${size}`;
+  if (category) url += `&category=${category}`;
+  if (search) url += `&search=${search}`;
+
+  const response = await fetch(url, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Errore nel recupero dei componenti");
   }
 
-  const response = await fetch(url);
-  if (!response.ok) {
-    throw new Error("Errore durante il recupero dei componenti.");
-  }
-  return await response.json();
-};
-
-export const getComponentById = async (id) => {
-  const response = await fetch(`${API_URL}/${id}`);
-  if (!response.ok) {
-    throw new Error("Impossibile trovare il componente richiesto.");
-  }
   return await response.json();
 };
 

@@ -1,13 +1,13 @@
 package save.WhiteRigEngine.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import save.WhiteRigEngine.entities.ComponentProduct;
 import save.WhiteRigEngine.exceptions.ResourceNotFoundException;
 import save.WhiteRigEngine.model.Category;
 import save.WhiteRigEngine.repositories.ComponentRepository;
-
-import java.util.List;
 
 @Service
 public class ComponentService {
@@ -19,9 +19,9 @@ public class ComponentService {
         this.componentRepository = componentRepository;
     }
 
-    // Recupera tutti i componenti
-    public List<ComponentProduct> getAllComponents() {
-        return componentRepository.findAll();
+    // Recupera tutti i componenti con paginazione
+    public Page<ComponentProduct> getAllComponents(Pageable pageable) {
+        return componentRepository.findAll(pageable);
     }
 
     // Recupera componenti per ID
@@ -30,14 +30,14 @@ public class ComponentService {
                 .orElseThrow(() -> new ResourceNotFoundException("Componente non trovato con ID: " + id));
     }
 
-    // Recupera i componenti per categoria
-    public List<ComponentProduct> getComponentsByCategory(Category category) {
-        return componentRepository.findByCategory(category);
+    // Recupera i componenti per categoria con paginazione
+    public Page<ComponentProduct> getComponentsByCategory(Category category, Pageable pageable) {
+        return componentRepository.findByCategory(category, pageable);
     }
 
-    // Recupera componenti per nome
-    public List<ComponentProduct> searchComponentsByName(String name) {
-        return componentRepository.findByNameContainingIgnoreCase(name);
+    // Recupera componenti per nome con paginazione
+    public Page<ComponentProduct> searchComponentsByName(String name, Pageable pageable) {
+        return componentRepository.findByNameContainingIgnoreCase(name, pageable);
     }
 
     // Salva un nuovo componente o aggiorna uno esistente

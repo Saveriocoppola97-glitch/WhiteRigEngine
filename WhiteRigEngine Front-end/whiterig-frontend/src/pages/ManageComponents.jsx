@@ -9,7 +9,7 @@ import {
   Form,
 } from "react-bootstrap";
 import {
-  getAllComponents,
+  getComponents,
   updateComponent,
   deleteComponent,
 } from "../services/componentService";
@@ -25,8 +25,8 @@ function ManageComponents() {
   const fetchProducts = useCallback(async () => {
     try {
       setLoading(true);
-      const data = await getAllComponents();
-      setProducts(data);
+      const data = await getComponents(0, 100);
+      setProducts(data.content || data);
       setError(null);
     } catch {
       setError("Impossibile caricare/modificare i componenti.");
@@ -75,7 +75,7 @@ function ManageComponents() {
 
   return (
     <Container className="py-5">
-      <h2 className="mb-4 fw-bold">⚙️ Gestione e Modifica Componenti</h2>
+      <h2 className="mb-4 fw-bold">Gestione e Modifica Componenti</h2>
 
       {loading && (
         <div className="text-center my-5">
