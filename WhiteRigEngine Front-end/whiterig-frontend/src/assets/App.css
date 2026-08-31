@@ -109,3 +109,19 @@ h3 {
   border-color: #d4d5d6 !important;
   background: linear-gradient(135deg, #58636d83 0%, #f0f2f4 100%) !important;
 }
+
+@keyframes cardEntrance {
+  from {
+    opacity: 0;
+    transform: translateY(150px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.product-card-animated {
+  animation: cardEntrance 1.5s cubic-bezier(0.1, 1, 0.3, 1) forwards;
+  opacity: 0;
+}

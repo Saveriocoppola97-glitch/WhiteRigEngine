@@ -5,7 +5,6 @@ import {
   Col,
   Card,
   Button,
-  Spinner,
   Alert,
   Badge,
   Nav,
@@ -20,7 +19,6 @@ import "../assets/App.css";
 function Home() {
   const [products, setProducts] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("ALL");
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { addToCart } = useCart();
   const [showToast, setShowToast] = useState(false);
@@ -45,8 +43,6 @@ function Home() {
       setProducts(data);
     } catch {
       setError("Impossibile caricare il catalogo.");
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -64,7 +60,7 @@ function Home() {
     <div>
       <ToastContainer
         position="top-end"
-        className=" text-center font-monospace p-1 position-fixed rounded-5"
+        className="text-center font-monospace p-1 position-fixed rounded-5"
         style={{ zIndex: 1055 }}
       >
         <Toast
@@ -110,13 +106,7 @@ function Home() {
               <Nav.Item key={cat.key} className="d-flex">
                 <Nav.Link
                   active={selectedCategory === cat.key}
-                  onClick={() => {
-                    // Se clicchi sulla stessa categoria, non fare nulla ed evita il blocco del loading
-                    if (selectedCategory !== cat.key) {
-                      setLoading(true);
-                      setSelectedCategory(cat.key);
-                    }
-                  }}
+                  onClick={() => setSelectedCategory(cat.key)}
                   className={`pills-custom-overlay px-4 py-3 fw-semibold d-flex align-items-center justify-content-center text-center flex-fill ${
                     selectedCategory === cat.key
                       ? "bg-dark text-white shadow-sm"
@@ -131,26 +121,24 @@ function Home() {
           </Nav>
         </div>
 
-        {loading && (
-          <div className="text-center my-5">
-            <Spinner animation="border" variant="dark" />
-            <p className="mt-2 text-muted">
-              Caricamento componenti in corso...
-            </p>
-          </div>
-        )}
-
         {error && <Alert variant="danger">{error}</Alert>}
 
-        {!loading && !error && products.length === 0 && (
+        {!error && products.length === 0 && (
           <Alert variant="info" className="text-center py-4">
             Nessun componente disponibile in questa categoria al momento.
           </Alert>
         )}
 
+        {/* Griglia dei prodotti con animazione sequenziale pulita */}
         <Row>
-          {products.map((product) => (
-            <Col md={4} lg={3} className="mb-4" key={product.id}>
+          {products.map((product, index) => (
+            <Col
+              md={4}
+              lg={3}
+              className="mb-4 product-card-animated"
+              key={product.id}
+              style={{ animationDelay: `${index * 0.06}s` }}
+            >
               <Card className="h-100 shadow-sm border-0 position-relative overflow-hidden">
                 {product.stockQuantity <= 0 && (
                   <Badge
