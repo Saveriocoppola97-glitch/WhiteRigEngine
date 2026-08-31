@@ -9,6 +9,7 @@ import save.WhiteRigEngine.entities.User;
 import save.WhiteRigEngine.model.BuildRequestDTO;
 import save.WhiteRigEngine.repositories.UserRepository;
 import save.WhiteRigEngine.services.BuildService;
+import jakarta.validation.Valid;
 
 import java.security.Principal;
 import java.util.List;
@@ -44,7 +45,7 @@ public class BuildController {
     }
 
     @PostMapping
-    public ResponseEntity<CustomBuild> createBuild(@RequestBody BuildRequestDTO buildDTO, Principal principal) {
+    public ResponseEntity<CustomBuild> createBuild(@Valid @RequestBody BuildRequestDTO buildDTO, Principal principal) {
         User user = userRepository.findByUsername(principal.getName())
                 .orElseThrow(() -> new RuntimeException("Utente non trovato"));
 

@@ -45,16 +45,16 @@ public class GlobalExceptionHandler {
     }
 
     // Gestione Stock Insufficiente (HTTP 400 Bad Request)
-    @ExceptionHandler(InsufficientStockException.class)
-    public ResponseEntity<ErrorResponse> handleInsufficientStockException(
-            InsufficientStockException ex,
+    @ExceptionHandler(org.springframework.web.bind.MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse> handleValidationExceptions(
+            org.springframework.web.bind.MethodArgumentNotValidException ex,
             HttpServletRequest request) {
-
+        String errorMessage = ex.getBindingResult().getAllErrors().getFirst().getDefaultMessage();
         ErrorResponse error = new ErrorResponse(
                 LocalDateTime.now(),
                 HttpStatus.BAD_REQUEST.value(),
                 HttpStatus.BAD_REQUEST.getReasonPhrase(),
-                ex.getMessage(),
+                errorMessage,
                 request.getRequestURI()
         );
 
