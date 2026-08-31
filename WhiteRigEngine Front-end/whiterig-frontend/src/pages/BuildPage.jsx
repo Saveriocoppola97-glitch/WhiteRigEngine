@@ -99,7 +99,7 @@ export default function BuildPage() {
   const getBuildPayload = () => {
     const user = JSON.parse(localStorage.getItem("user"));
     return {
-      buildName: buildName.trim() || "Mia Custom Build",
+      buildName: buildName.trim(),
       cpuId: selectedParts.cpu?.id || null,
       gpuId: selectedParts.gpu?.id || null,
       ramId: selectedParts.ram?.id || null,
@@ -325,7 +325,7 @@ export default function BuildPage() {
                 variant="success"
                 className="w-100 fw-bold mt-3"
                 onClick={handleSaveBuild}
-                disabled={totalPrice === 0}
+                disabled={totalPrice === 0 || !buildName.trim()}
               >
                 Salva Build
               </Button>
