@@ -16,6 +16,22 @@ function RegisterPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setError("Inserisci un indirizzo email valido (es. nome@dominio.it)");
+      return;
+    }
+
+    if (username.length < 3 || username.length > 20) {
+      setError("L' username deve avere tra 3 e 20 caratteri.");
+      return;
+    }
+    if (password.length < 6) {
+      setError("La password deve contenere almeno 6 caratteri.");
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -24,7 +40,12 @@ function RegisterPage() {
       navigate("/login");
     } catch (err) {
       setLoading(false);
-      setError(err.message || "Registrazione fallita. Riprova.");
+      try {
+        const errorObj = JSON.parse(err.message);
+        setError(errorObj.message || "Registrazione fallita. Riprova.");
+      } catch {
+        setError(err.message || "Registrazione fallita. Riprova.");
+      }
     }
   };
 
@@ -43,7 +64,8 @@ function RegisterPage() {
                   placeholder="Inserisci username"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  required
+                  minLength={3}
+                  maxLength={20}
                 />
               </Form.Group>
 
@@ -54,7 +76,6 @@ function RegisterPage() {
                   placeholder="Inserisci email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  required
                 />
               </Form.Group>
 
@@ -65,7 +86,6 @@ function RegisterPage() {
                   placeholder="Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  required
                 />
               </Form.Group>
 

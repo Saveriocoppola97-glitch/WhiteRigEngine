@@ -42,13 +42,15 @@ export const saveCustomBuild = async (buildData) => {
     headers: getAuthHeaders(),
     body: JSON.stringify(buildData),
   });
+
   if (!response.ok) {
-    throw new Error("Errore durante il salvataggio della build");
+    const text = await response.text();
+    throw new Error(text || "Errore durante il salvataggio della build");
   }
   return await response.json();
 };
 
-// Recupera le build dell'utente autenticato (tramite Token JWT)
+// Recupera le build dell'utente autenticato (tramite Token)
 export const getMyBuilds = async () => {
   const response = await fetch(`${API_URL}/my-builds`, {
     method: "GET",

@@ -141,7 +141,7 @@ export default function BuildPage() {
       setSuccessMessage("Build salvata con successo!");
     } catch (err) {
       console.error(err);
-      setErrorMessage("Impossibile salvare la build. Riprova.");
+      setErrorMessage(err.message || "Impossibile salvare la build. Riprova.");
     }
   };
 
