@@ -111,8 +111,11 @@ function Home() {
                 <Nav.Link
                   active={selectedCategory === cat.key}
                   onClick={() => {
-                    setLoading(true);
-                    setSelectedCategory(cat.key);
+                    // Se clicchi sulla stessa categoria, non fare nulla ed evita il blocco del loading
+                    if (selectedCategory !== cat.key) {
+                      setLoading(true);
+                      setSelectedCategory(cat.key);
+                    }
                   }}
                   className={`pills-custom-overlay px-4 py-3 fw-semibold d-flex align-items-center justify-content-center text-center flex-fill ${
                     selectedCategory === cat.key
