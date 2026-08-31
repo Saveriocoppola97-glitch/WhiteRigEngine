@@ -55,9 +55,17 @@ export default function BuildPage() {
       if (!res.ok) throw new Error();
       let data = await res.json();
 
+      // CPU in base al socket della Scheda Madre
       if (categoryName === "CPU" && selectedParts.motherboard?.socket) {
         data = data.filter(
           (c) => c.socket === selectedParts.motherboard.socket,
+        );
+      }
+
+      // RAM in base al tipo supportato dalla Scheda Madre
+      if (categoryName === "RAM" && selectedParts.motherboard?.ramType) {
+        data = data.filter(
+          (c) => c.ramType === selectedParts.motherboard.ramType,
         );
       }
 
