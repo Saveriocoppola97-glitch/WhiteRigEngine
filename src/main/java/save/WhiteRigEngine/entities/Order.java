@@ -23,7 +23,10 @@ public class Order {
 
     private BigDecimal totalPrice = BigDecimal.ZERO;
 
-    private String status = "COMPLETED";
+    private String status = "PENDING";
+
+    private String paymentId;
+    private String paymentStatus = "PENDING"; 
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
