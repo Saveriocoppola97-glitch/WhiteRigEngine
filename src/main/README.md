@@ -85,12 +85,58 @@ Incolla il token e conferma: ora puoi testare qualsiasi rotta protetta.
 ```text
 src/main/java/save/WhiteRigEngine/
 ├── config/          # Configurazione Security, OpenAPI e JWT
-├── controller/      # REST Controllers (Auth, Component, Build, Blog, User)
-├── dto/             # Data Transfer Objects (Request/Response)
+├── controllers/     # REST Controllers (Auth, Component, Build, Blog, User)
+├── entities/        # Classi di supporto (Entities)
+├── exceptions/      # Gestione centralizzata delle eccezioni
 ├── model/           # Entità JPA (User, Component, Build, BlogPost)
-├── repository/      # Interfacce Spring Data JPA
-└── service/         # Logica di business e servizi
+├── repositories/    # Interfacce Spring Data JPA
+├── services/        # Logica di business e servizi
+└── WhiteRigEngineApplication.java
 ```
+
+
+
+---
+
+## 🎨 Frontend (React + Vite + Bootstrap)
+
+[![React](https://img.shields.io/badge/React-19-blue.svg)](https://react.dev/)
+[![Vite](https://img.shields.io/badge/Vite-Bundler-purple.svg)](https://vitejs.dev/)
+[![Bootstrap](https://img.shields.io/badge/Bootstrap-React-purple.svg)](https://react-bootstrap.github.io/)
+
+L'interfaccia utente di **WhiteRigEngine** è una Single Page Application (SPA) moderna e reattiva, progettata per offrire un'esperienza fluida nella gestione del catalogo, nella creazione guidata delle configurazioni PC (*Rig Builder*) e nella consultazione del blog.
+
+---
+
+### Come Avviare il Frontend in Locale
+
+1. Assicurati di avere installato **Node.js** (versione LTS consigliata).
+2. Spostati nella cartella del frontend (o clona la repository dedicata al client):
+   ```bash
+   cd "WhiteRigEngine Front-end"
+   
+3. Installa le dipendenze del progetto:
+   ```bash
+   npm install
+   
+4. Avvia il server di sviluppo locale con Vite:
+   ```bash
+   npm run dev
+   
+5. Apri il browser all'indirizzo indicato nel terminale (di solito): http://localhost:5173
+
+### Struttura del Frontend
+```text
+src/
+├── assets/          # Immagini, loghi e risorse statiche
+├── components/      # Componenti riutilizzabili (Navbar, Modali, Card, ecc.)
+├── context/         # Gestione dello stato globale (Autenticazione ecc.)
+├── pages/           # Pagine principali dell'applicazione (BuildPage, Shop, Blog, Auth)
+├── services/        # Moduli di comunicazione REST (Fetch)
+├── App.jsx          # Configurazione delle rotte e del layout principale
+└── main.jsx         # Punto di ingresso dell'applicazione React
+```
+
 
 👨‍💻 Sviluppato da Saverio (WhiteRig Team). 
 
