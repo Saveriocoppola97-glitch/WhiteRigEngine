@@ -30,7 +30,7 @@ export const checkoutOrder = async (userEmail, cartItems) => {
   return await response.json();
 };
 
-// FUNZIONE PER RECUPERO ORDINI
+// Funzione per recuperare ordine
 export const getUserOrders = async () => {
   const token = getToken();
 
@@ -50,7 +50,7 @@ export const getUserOrders = async () => {
   return await response.json();
 };
 
-// FUNZIONE PER SCARICARE/VISUALIZZARE IL PDF DELL'ORDINE
+// Funzione per visualizzare PDF
 export const downloadOrderPdf = async (orderId) => {
   const token = getToken();
 
@@ -67,13 +67,10 @@ export const downloadOrderPdf = async (orderId) => {
       errorText || "Errore durante il download del PDF dell'ordine.",
     );
   }
-
   // Converto la risposta in un blob PDF
   const blob = await response.blob();
-
-  // Creo un URL locale temporaneo
+  // Creo un URL temporaneo
   const blobUrl = window.URL.createObjectURL(blob);
-
-  // Apro il PDF direttamente nel browser (pronto per la stampa/salvataggio)
+  // Apro il PDF direttamente nel browser
   window.open(blobUrl, "_blank");
 };
