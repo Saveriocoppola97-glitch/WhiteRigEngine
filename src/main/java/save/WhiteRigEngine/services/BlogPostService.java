@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import save.WhiteRigEngine.entities.BlogPost;
 import save.WhiteRigEngine.exceptions.ResourceNotFoundException;
 import save.WhiteRigEngine.repositories.BlogPostRepository;
-
 import java.util.List;
 
 @Service

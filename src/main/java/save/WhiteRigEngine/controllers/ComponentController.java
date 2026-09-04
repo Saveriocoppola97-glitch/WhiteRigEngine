@@ -64,7 +64,6 @@ public class ComponentController {
             @RequestParam(value = "ramType", required = false) String ramType,
             @RequestParam(value = "formFactor", required = false) String formFactor,
             @RequestParam("image") MultipartFile image) {
-
         ComponentProduct component = new ComponentProduct();
         component.setName(name);
         component.setBrand(brand);
@@ -85,14 +84,14 @@ public class ComponentController {
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
-    // POST JSON classico (mantenuto per retro compatibilità se passi solo stringhe URL)
+    // POST JSON
     @PostMapping
     public ResponseEntity<ComponentProduct> createComponentJson(@RequestBody ComponentProduct component) {
         ComponentProduct created = componentService.saveComponent(component);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
-    // PUT che aggiorna un componente esistente + opzione di aggiornare anche l'immagine
+    // PUT che aggiorna un componente esistente e opzione per aggiornare anche l'immagine
     @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ComponentProduct> updateComponentWithImage(
             @PathVariable Long id,
@@ -107,9 +106,7 @@ public class ComponentController {
             @RequestParam(value = "ramType", required = false) String ramType,
             @RequestParam(value = "formFactor", required = false) String formFactor,
             @RequestParam(value = "image", required = false) MultipartFile image) {
-
         ComponentProduct existingComponent = componentService.getComponentById(id);
-
         existingComponent.setName(name);
         existingComponent.setBrand(brand);
         existingComponent.setCategory(category);
@@ -134,7 +131,6 @@ public class ComponentController {
     public ResponseEntity<ComponentProduct> updateComponentJson(
             @PathVariable Long id,
             @RequestBody ComponentProduct componentDetails) {
-
         ComponentProduct existingComponent = componentService.getComponentById(id);
         existingComponent.setName(componentDetails.getName());
         existingComponent.setBrand(componentDetails.getBrand());
@@ -150,8 +146,7 @@ public class ComponentController {
 
         return ResponseEntity.ok(componentService.saveComponent(existingComponent));
     }
-
-    // DELETE che elimina il componente
+    // DELETE
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteComponent(@PathVariable Long id) {
         componentService.deleteComponent(id);

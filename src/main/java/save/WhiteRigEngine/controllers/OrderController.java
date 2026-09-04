@@ -12,7 +12,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -46,9 +45,7 @@ public class OrderController {
     public ResponseEntity<byte[]> downloadOrderPdf(@PathVariable Long orderId) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new RuntimeException("Ordine non trovato"));
-
         byte[] pdfBytes = pdfService.generateOrderPdf(order);
-
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
         headers.setContentDispositionFormData("attachment", "ordine_" + order.getId() + ".pdf");

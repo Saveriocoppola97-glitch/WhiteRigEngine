@@ -55,7 +55,6 @@ public class AuthController {
         user.setName(registerDTO.getName());
         user.setSurname(registerDTO.getSurname());
         user.setRole(Role.USER);
-
         userRepository.save(user);
 
         return ResponseEntity.status(HttpStatus.CREATED).body("Utente registrato con successo!");
@@ -65,12 +64,9 @@ public class AuthController {
     public ResponseEntity<AuthResponseDTO> authenticateUser(@Valid @RequestBody LoginDTO loginDTO) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginDTO.getUsername(), loginDTO.getPassword()));
-
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateJwtToken(authentication);
-
         User user = userRepository.findByUsername(loginDTO.getUsername()).orElseThrow();
-
         return ResponseEntity.ok(new AuthResponseDTO(jwt, "Bearer", user.getUsername(), user.getRole().name()));
     }
 }

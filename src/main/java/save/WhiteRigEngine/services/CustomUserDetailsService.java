@@ -9,7 +9,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import save.WhiteRigEngine.entities.User;
 import save.WhiteRigEngine.repositories.UserRepository;
-
 import java.util.Collections;
 
 @Service

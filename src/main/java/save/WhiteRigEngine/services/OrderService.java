@@ -48,10 +48,8 @@ public class OrderService {
 
         List<OrderItem> orderItems = cart.getItems().stream().map(cartItem -> {
             ComponentProduct comp = cartItem.getComponent();
-
             comp.setStockQuantity(comp.getStockQuantity() - cartItem.getQuantity());
             componentRepository.save(comp);
-
             OrderItem item = new OrderItem();
             item.setComponent(comp);
             item.setQuantity(cartItem.getQuantity());
@@ -62,7 +60,6 @@ public class OrderService {
 
         order.setItems(orderItems);
         orderRepository.save(order);
-
         cart.getItems().clear();
         cart.setTotalPrice(0.0);
         cartRepository.save(cart);
@@ -100,15 +97,12 @@ public class OrderService {
 
             comp.setStockQuantity(comp.getStockQuantity() - itemDto.getQuantity());
             componentRepository.save(comp);
-
             BigDecimal itemPrice = comp.getPrice().multiply(BigDecimal.valueOf(itemDto.getQuantity()));
-
             OrderItem item = new OrderItem();
             item.setComponent(comp);
             item.setQuantity(itemDto.getQuantity());
             item.setPriceAtPurchase(comp.getPrice());
             item.setOrder(order);
-
             calculatedTotal = calculatedTotal.add(itemPrice);
             orderItems.add(item);
         }

@@ -5,7 +5,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import save.WhiteRigEngine.entities.User;
 import save.WhiteRigEngine.services.UserService;
-
 import java.util.List;
 
 @RestController

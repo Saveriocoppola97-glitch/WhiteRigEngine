@@ -7,7 +7,6 @@ import save.WhiteRigEngine.entities.CartItem;
 import save.WhiteRigEngine.entities.ComponentProduct;
 import save.WhiteRigEngine.repositories.CartRepository;
 import save.WhiteRigEngine.repositories.ComponentRepository;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -51,7 +50,6 @@ public class CartService {
             newItem.setCart(cart);
             cart.getItems().add(newItem);
         }
-
         calculateAndSetTotalPrice(cart);
         return cartRepository.save(cart);
     }
@@ -59,15 +57,12 @@ public class CartService {
     // Aggiungo un'intera lista di componenti al carrello
     public Cart addBuildToCart(String userEmail, List<Long> componentIds) {
         Cart cart = getOrCreateCart(userEmail);
-
         for (Long componentId : componentIds) {
             ComponentProduct component = componentRepository.findById(componentId)
                     .orElseThrow(() -> new RuntimeException("Component not found with id: " + componentId));
-
             Optional<CartItem> existingItemOpt = cart.getItems().stream()
                     .filter(item -> item.getComponent().getId().equals(componentId))
                     .findFirst();
-
             if (existingItemOpt.isPresent()) {
                 CartItem existingItem = existingItemOpt.get();
                 existingItem.setQuantity(existingItem.getQuantity() + 1);
@@ -79,7 +74,6 @@ public class CartService {
                 cart.getItems().add(newItem);
             }
         }
-
         calculateAndSetTotalPrice(cart);
         return cartRepository.save(cart);
     }
@@ -90,20 +84,16 @@ public class CartService {
                 .map(item -> item.getComponent().getPrice()
                         .multiply(java.math.BigDecimal.valueOf(item.getQuantity())))
                 .reduce(java.math.BigDecimal.ZERO, java.math.BigDecimal::add);
-
         cart.setTotalPrice(total.doubleValue());
     }
 
     // Rimuovo item dal carrello
     public Cart removeItemFromCart(String userEmail, Long cartItemId) {
         Cart cart = getOrCreateCart(userEmail);
-
         cart.getItems().removeIf(item -> item.getId().equals(cartItemId));
-
         calculateAndSetTotalPrice(cart);
         return cartRepository.save(cart);
     }
-
     // Pulisco il carrello (usare dopo il checkout)
     public void clearCart(String userEmail) {
         Cart cart = getOrCreateCart(userEmail);

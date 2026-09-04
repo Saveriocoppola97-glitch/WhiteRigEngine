@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import save.WhiteRigEngine.entities.User;
 import save.WhiteRigEngine.exceptions.ResourceNotFoundException;
 import save.WhiteRigEngine.repositories.UserRepository;
-
 import java.util.List;
 
 @Service
@@ -26,7 +25,6 @@ public class UserService {
         return userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Utente non trovato: " + id));
     }
-
     public User saveUser(User user) {
         return userRepository.save(user);
     }

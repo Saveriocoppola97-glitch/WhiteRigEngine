@@ -16,7 +16,7 @@ public class CartController {
     @Autowired
     private CartService cartService;
 
-    // Ottengo il carrello dell'utente autenticato
+    // Ottengo il carrello dell'utente
     @GetMapping
     public ResponseEntity<Cart> getCart(Principal principal) {
         String userEmail = principal.getName();
@@ -24,7 +24,7 @@ public class CartController {
         return ResponseEntity.ok(cart);
     }
 
-    // Aggiungo un componente al carrello dell'utente autenticato
+    // Aggiungo un componente al carrello
     @PostMapping("/add")
     public ResponseEntity<Cart> addComponent(
             Principal principal,
@@ -35,7 +35,7 @@ public class CartController {
         return ResponseEntity.ok(updatedCart);
     }
 
-    // Aggiunge un'intera build/lista di componenti in blocco
+    // Aggiunge un'intera build di componenti in blocco
     @PostMapping("/add-build")
     public ResponseEntity<Cart> addBuild(
             Principal principal,

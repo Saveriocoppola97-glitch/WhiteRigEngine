@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import save.WhiteRigEngine.model.Category;
-
 import java.math.BigDecimal;
 
 @Entity

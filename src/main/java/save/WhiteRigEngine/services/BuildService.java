@@ -8,7 +8,6 @@ import save.WhiteRigEngine.exceptions.ResourceNotFoundException;
 import save.WhiteRigEngine.model.BuildRequestDTO;
 import save.WhiteRigEngine.repositories.BuildRepository;
 import save.WhiteRigEngine.repositories.ComponentRepository;
-
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
@@ -29,7 +28,6 @@ public class BuildService {
     public List<CustomBuild> getAllBuilds() {
         return buildRepository.findAll();
     }
-
     public CustomBuild getBuildById(Long id) {
         return buildRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Configurazione PC non trovata con ID: " + id));
@@ -52,7 +50,6 @@ public class BuildService {
         build.setCooling(fetchComponent(dto.getCoolingId()));
         build.setPsu(fetchComponent(dto.getPsuId()));
         build.setPcCase(fetchComponent(dto.getCaseId()));
-
         BigDecimal totalPrice = Stream.of(
                         build.getCpu(),
                         build.getGpu(),

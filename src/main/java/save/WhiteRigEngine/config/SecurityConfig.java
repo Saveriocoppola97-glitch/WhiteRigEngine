@@ -42,24 +42,18 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // Endpoint Swagger / OpenAPI pubblici
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
-
                         // Endpoint di autenticazione pubblica
                         .requestMatchers("/api/auth/**").permitAll()
-
                         // Lettura pubblica dei prodotti, del blog e delle build
                         .requestMatchers(HttpMethod.GET, "/api/components/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/blog/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/builds/**").permitAll()
-
-                        // Simulatore e calcolo compatibilità hardware pubblico (POST)
+                        // Simulatore e calcolo compatibilità hardware (POST)
                         .requestMatchers(HttpMethod.POST, "/api/builds/check-compatibility").permitAll()
-
-                        // Tutti gli altri richiedono autenticazione JWT
+                        // Gli altri richiedono autenticazione JWT
                         .anyRequest().authenticated()
                 );
-
         http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
-
         return http.build();
     }
 }

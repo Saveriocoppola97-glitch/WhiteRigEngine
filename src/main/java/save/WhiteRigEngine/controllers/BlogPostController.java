@@ -6,7 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import save.WhiteRigEngine.entities.BlogPost;
 import save.WhiteRigEngine.services.BlogPostService;
-
 import java.util.List;
 
 @RestController
