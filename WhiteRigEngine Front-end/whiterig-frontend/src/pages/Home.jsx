@@ -206,14 +206,6 @@ function Home() {
 
                     <div className="d-grid gap-2">
                       <Button
-                        variant="outline-dark"
-                        size="sm"
-                        as={Link}
-                        to={`/components/${product.id}`}
-                      >
-                        Dettagli
-                      </Button>
-                      <Button
                         variant="dark"
                         size="sm"
                         onClick={() => handleAddToCart(product)}

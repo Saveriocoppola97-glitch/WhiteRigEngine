@@ -3,6 +3,8 @@ package save.WhiteRigEngine.config;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jspecify.annotations.NonNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
@@ -17,13 +19,15 @@ import save.WhiteRigEngine.model.Role;
 import save.WhiteRigEngine.repositories.BlogPostRepository;
 import save.WhiteRigEngine.repositories.ComponentRepository;
 import save.WhiteRigEngine.repositories.UserRepository;
-
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
 @Component
 @Order(1)
 public class DatabaseSeeder implements CommandLineRunner {
+
+    private static final Logger log = LoggerFactory.getLogger(DatabaseSeeder.class);
 
     @Value("${app.admin.username}")
     private String adminUsername;
@@ -55,24 +59,33 @@ public class DatabaseSeeder implements CommandLineRunner {
 
     @Override
     public void run(String @NonNull ... args) throws Exception {
-        // Inserisco Componenti da JSON
+        seedComponents();
+        seedAdminUser();
+        seedInitialBlogPost();
+
+        log.info("Dati iniziali caricati con successo!");
+    }
+
+    private void seedComponents() {
         if (componentRepository.count() == 0) {
-            try {
-                InputStream inputStream = new ClassPathResource("components.json").getInputStream();
+            log.info("Inserimento componenti da components.json in corso...");
+            try (InputStream inputStream = new ClassPathResource("components.json").getInputStream()) {
                 List<ComponentProduct> components = objectMapper.readValue(
                         inputStream,
                         new TypeReference<List<ComponentProduct>>() {}
                 );
                 componentRepository.saveAll(components);
-                System.out.println(">>> " + components.size() + " componenti caricati con successo da components.json!");
-            } catch (Exception e) {
-                System.err.println("Errore durante il caricamento dei componenti dal JSON: " + e.getMessage());
+                log.info("{} componenti caricati con successo!", components.size());
+            } catch (IOException e) {
+                log.error("Errore durante il caricamento dei componenti dal JSON: {}", e.getMessage(), e);
+                throw new RuntimeException("Impossibile inizializzare i componenti da components.json", e);
             }
         }
+    }
 
-        // Inserisco dati Admin
+    private void seedAdminUser() {
         if (userRepository.count() == 0) {
-            userRepository.save(new User(
+            User admin = new User(
                     null,
                     "Saverio",
                     "Casabianca",
@@ -80,21 +93,24 @@ public class DatabaseSeeder implements CommandLineRunner {
                     adminEmail,
                     passwordEncoder.encode(adminPassword),
                     Role.ADMIN
-            ));
+            );
+            userRepository.save(admin);
+            log.info("Utente Admin ({}) creato con successo.", adminUsername);
         }
+    }
 
-        // 3. Blog d'esempio
+    private void seedInitialBlogPost() {
         if (blogPostRepository.count() == 0) {
-            blogPostRepository.save(new BlogPost(
+            BlogPost post = new BlogPost(
                     null,
                     "Benvenuti su WhiteRig Engine!",
                     "Questo blog racchiude la mia passione per l'hardware e il mondo dei PC Custom.",
                     adminUsername,
                     "https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=500",
                     null
-            ));
+            );
+            blogPostRepository.save(post);
+            log.info("Post del blog creato con successo.");
         }
-
-        System.out.println("Dati iniziali inseriti con successo!");
     }
 }
