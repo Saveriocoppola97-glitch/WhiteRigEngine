@@ -150,7 +150,15 @@ h3 {
 }
 
 .product-hover-card:hover {
-  transform: translateY(-5px); /* Solleva la card verso l'alto */
-  box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.12) !important; /* Ombra più profonda e professionale */
+  transform: translateY(-5px);
+  box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.12) !important;
   z-index: 5;
+}
+
+.main-bg-image {
+  background-image: url("./Immagine sfondo.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }

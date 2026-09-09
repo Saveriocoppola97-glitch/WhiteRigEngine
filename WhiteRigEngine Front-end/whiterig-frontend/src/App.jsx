@@ -21,7 +21,7 @@ function App() {
       <Router>
         <div className="bg-white min-vh-100 d-flex flex-column">
           <MyNavbar />
-          <div className="flex-fill">
+          <div className="flex-fill main-bg-image">
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<LoginPage />} />
