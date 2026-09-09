@@ -125,3 +125,32 @@ h3 {
   animation: cardEntrance 1.5s cubic-bezier(0.1, 1, 0.3, 1) forwards;
   opacity: 0;
 }
+
+.search-bar-container {
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.search-bar-container:hover,
+.search-bar-container:focus-within {
+  transform: scale(1.05);
+  z-index: 10;
+}
+
+.search-bar-container input:focus {
+  border-color: #181b1e !important;
+  box-shadow: 0 0.4rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+
+.product-hover-card {
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.product-hover-card:hover {
+  transform: translateY(-5px); /* Solleva la card verso l'alto */
+  box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.12) !important; /* Ombra più profonda e professionale */
+  z-index: 5;
+}

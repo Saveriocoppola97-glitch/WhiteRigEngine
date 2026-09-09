@@ -26,6 +26,8 @@ function Home() {
   const { addToCart } = useCart();
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
 
   const categories = [
     { key: "ALL", label: "Tutti i Prodotti" },
@@ -39,11 +41,19 @@ function Home() {
     { key: "PSU", label: "Alimentatori (PSU)" },
   ];
 
-  const fetchProducts = async (category, page) => {
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(searchTerm);
+    }, 400);
+
+    return () => clearTimeout(timer);
+  }, [searchTerm]);
+
+  const fetchProducts = async (category, page, search) => {
     try {
       setError(null);
       const catParam = category === "ALL" ? "" : category;
-      const data = await getComponents(page, 20, catParam);
+      const data = await getComponents(page, 20, catParam, search);
 
       setProducts(data.content);
       setCurrentPage(data.number);
@@ -55,11 +65,11 @@ function Home() {
 
   useEffect(() => {
     setCurrentPage(0);
-    fetchProducts(selectedCategory, 0);
-  }, [selectedCategory]);
+    fetchProducts(selectedCategory, 0, debouncedSearch);
+  }, [selectedCategory, debouncedSearch]);
 
   const handlePageChange = (newPage) => {
-    fetchProducts(selectedCategory, newPage);
+    fetchProducts(selectedCategory, newPage, debouncedSearch);
     window.scrollTo({ top: 400, behavior: "smooth" });
   };
 
@@ -110,6 +120,35 @@ function Home() {
       </div>
 
       <Container className="mb-5">
+        <div className="mb-4">
+          <div
+            className="position-relative mx-auto search-bar-container"
+            style={{ maxWidth: "600px" }}
+          >
+            <input
+              type="text"
+              className="form-control form-control-lg text-dark shadow-sm rounded-pill px-4 py-3 border-secondary"
+              style={{
+                backgroundColor: "#dbdada75",
+                backdropFilter: "blur(5px)",
+              }}
+              placeholder="Cerca componenti per nome/marca"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            {searchTerm && (
+              <button
+                type="button"
+                className="btn btn-sm position-absolute top-50 end-0 translate-middle-y me-3 text-dark border-0 bg-transparent fw-bold fs-5"
+                onClick={() => setSearchTerm("")}
+                title="Cancella ricerca"
+              >
+                &times;
+              </button>
+            )}
+          </div>
+        </div>
+
         <div className="d-flex justify-content-center mb-3 overflow-auto py-2">
           <Nav
             variant="pills"
@@ -147,11 +186,12 @@ function Home() {
             <Col
               md={4}
               lg={3}
-              className="mb-4 product-card-animated"
+              className="mb-4"
               key={product.id}
               style={{ animationDelay: `${index * 0.06}s` }}
             >
-              <Card className="h-100 shadow-sm border-0 position-relative overflow-hidden">
+              {/* CORRETTO: La classe product-hover-card è ora sul componente Card */}
+              <Card className="h-100 shadow-sm border-0 position-relative overflow-hidden product-hover-card">
                 {product.stockQuantity <= 0 && (
                   <Badge
                     bg="danger"

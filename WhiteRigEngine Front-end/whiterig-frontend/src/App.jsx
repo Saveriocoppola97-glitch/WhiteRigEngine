@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { CartProvider } from "./context/CartContext"; // Importiamo il CartProvider
+import { CartProvider } from "./context/CartContext";
 import MyNavbar from "./components/MyNavbar";
 import Home from "./pages/Home";
 import LoginPage from "./pages/LoginPage";
@@ -13,27 +13,31 @@ import MePage from "./pages/MePage";
 import UserOrdersPage from "./pages/UserOrdersPage";
 import BuildPage from "./pages/BuildPage";
 import MyBuildsPage from "./pages/MyBuildsPage";
+import MyFooter from "./components/MyFooter";
 
 function App() {
   return (
     <CartProvider>
       <Router>
-        <div className="bg-white min-vh-100">
+        <div className="bg-white min-vh-100 d-flex flex-column">
           <MyNavbar />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route path="/blog" element={<BlogPage />} />
-            <Route path="/blog/:id" element={<BlogDetailPage />} />
-            <Route path="/backoffice/manage" element={<ManageComponents />} />
-            <Route path="/backoffice/add" element={<BackofficePage />} />
-            <Route path="/cart" element={<CartPage />} />
-            <Route path="/me" element={<MePage />} />
-            <Route path="/my-orders" element={<UserOrdersPage />} />
-            <Route path="/build" element={<BuildPage />} />
-            <Route path="/my-builds" element={<MyBuildsPage />} />
-          </Routes>
+          <div className="flex-fill">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/register" element={<RegisterPage />} />
+              <Route path="/blog" element={<BlogPage />} />
+              <Route path="/blog/:id" element={<BlogDetailPage />} />
+              <Route path="/backoffice/manage" element={<ManageComponents />} />
+              <Route path="/backoffice/add" element={<BackofficePage />} />
+              <Route path="/cart" element={<CartPage />} />
+              <Route path="/me" element={<MePage />} />
+              <Route path="/my-orders" element={<UserOrdersPage />} />
+              <Route path="/build" element={<BuildPage />} />
+              <Route path="/my-builds" element={<MyBuildsPage />} />
+            </Routes>
+          </div>
+          <MyFooter />
         </div>
       </Router>
     </CartProvider>

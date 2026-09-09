@@ -92,8 +92,9 @@ function BlogPage() {
 
         {isAdmin && (
           <Button
-            variant="secondary pills-custom-overlay"
-            className="fw-bold text-dark shadow-sm"
+            variant="secondary"
+            className="fw-bold text-dark shadow-sm pills-custom-overlay"
+            style={{ backgroundColor: "#dbdada75" }}
             onClick={() => setShowModal(true)}
           >
             + Crea Blog
@@ -107,9 +108,18 @@ function BlogPage() {
         <Alert variant="info">Nessun articolo pubblicato al momento.</Alert>
       ) : (
         <Row>
-          {posts.map((post) => (
-            <Col md={4} className="mb-4" key={post.id}>
-              <Card className="h-100 shadow-sm border-0">
+          {posts.map((post, index) => (
+            <Col
+              md={4}
+              className="mb-4"
+              key={post.id}
+              style={{ animationDelay: `${index * 0.06}s` }}
+            >
+              <Card
+                as={Link}
+                to={`/blog/${post.id}`}
+                className="h-100 shadow-sm border-0 position-relative overflow-hidden product-hover-card text-decoration-none text-dark"
+              >
                 {post.coverImageUrl && (
                   <Card.Img
                     variant="top"
@@ -119,7 +129,9 @@ function BlogPage() {
                   />
                 )}
                 <Card.Body className="d-flex flex-column">
-                  <Card.Title className="fw-bold">{post.title}</Card.Title>
+                  <Card.Title className="fw-bold text-dark">
+                    {post.title}
+                  </Card.Title>
                   <Card.Subtitle className="mb-2 text-muted small">
                     Autore: {post.author || "Redazione"} |{" "}
                     {new Date(post.createdAt).toLocaleDateString()}
@@ -130,20 +142,16 @@ function BlogPage() {
                   >
                     {post.content}
                   </Card.Text>
-                  <Button
-                    as={Link}
-                    to={`/blog/${post.id}`}
-                    variant="outline-dark"
-                    className="mt-auto align-self-start"
-                  >
+                  <div className="mt-auto align-self-start btn btn-outline-dark btn-sm">
                     Leggi di più
-                  </Button>
+                  </div>
                 </Card.Body>
               </Card>
             </Col>
           ))}
         </Row>
       )}
+
       <Modal
         show={showModal}
         onHide={() => setShowModal(false)}
