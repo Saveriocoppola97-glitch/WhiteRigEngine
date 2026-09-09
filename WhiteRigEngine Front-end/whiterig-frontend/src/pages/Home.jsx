@@ -101,7 +101,7 @@ function Home() {
       <div className="bg-dark text-white py-3 mb-5 shadow-sm border-bottom border-secondary text-center">
         <Container className="py-4">
           <h1 className="display-4 fw-bold mb-3">
-            Benvenuto in WhiteRigEngine
+            Benvenuto su WhiteRigEngine
           </h1>
           <p className="lead text-light fs-5 mb-4">
             Il tuo e-commerce e configuratore di PC custom di fiducia.

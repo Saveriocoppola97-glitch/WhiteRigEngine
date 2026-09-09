@@ -117,13 +117,24 @@ export default function BuildPage() {
 
   useEffect(() => {
     if (!hasParts) {
+      setCompatibilityResult(null);
       return;
     }
     checkBuildCompatibility(getBuildPayload())
       .then(setCompatibilityResult)
       .catch((err) => console.error(err));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hasParts, buildName]);
+  }, [
+    selectedParts.cpu?.id,
+    selectedParts.motherboard?.id,
+    selectedParts.ram?.id,
+    selectedParts.gpu?.id,
+    selectedParts.storage?.id,
+    selectedParts.cooling?.id,
+    selectedParts.psu?.id,
+    selectedParts.case?.id,
+    buildName,
+  ]);
 
   const handleSaveBuild = async () => {
     setSuccessMessage(null);
